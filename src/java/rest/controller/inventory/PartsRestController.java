@@ -4,8 +4,14 @@ return "\n{\"sn\": \""+sn+"\",\"partsNumber\": \""+partsNumber+"\",\"name\": \""
 
 package rest.controller.inventory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import cvt.Convert;
+import dao.General;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -28,11 +34,17 @@ dao.inventory.DaoParts da=new dao.inventory.DaoImpParts();
 ApiBaseController json=new ApiBaseController();
 String msg="";
 
+GsonBuilder gsonBuilder = new GsonBuilder();
+Gson gson = gsonBuilder.create();
 @RequestMapping(value = "api/inventory/parts", method = RequestMethod.GET, produces = "application/json")
 @ResponseBody
 public String index()
 {
-return json.respondWithMessage("Success",da.getAll("from Parts"));
+    String sql = "SELECT SN sn, BIKE_ID bikeId, COST_PRICE costPrice, CREATED_DATE createdDate, ENTRY_DATE entryDate, NAME name, PARTS_NUMBER partsNumber, QUANTITY quantity, SELLING_PRICE sellingPrice, STATUS status,GET_BIKE_NAME(BIKE_ID) AS bikeName FROM parts";
+    String msg = "";
+    List list = null;
+    list = da.getRecord(sql);
+return json.respondWithMessage("Obtained Successfully",gson.toJson(list));
 }
     
 @RequestMapping(value = "api/inventory/parts", method = RequestMethod.POST, produces = "application/json")
@@ -43,23 +55,24 @@ public String doSave(@RequestBody String jcson) throws IOException
  map = mapper.readValue(jcson, new TypeReference<Map<String, String>>(){});
 
 model.inventory.Parts obj=new model.inventory.Parts();
-/*obj.setSn(map.get("sn").toString());
+/*obj.setSn(map.get("sn").toString());*/
 obj.setPartsNumber(map.get("partsNumber").toString());
 obj.setName(map.get("name").toString());
-obj.setBikeId(map.get("bikeId").toString());
-obj.setCostPrice(map.get("costPrice").toString());
-obj.setSellingPrice(map.get("sellingPrice").toString());
-obj.setQuantity(map.get("quantity").toString());
+obj.setBikeId(Convert.toInt(map.get("bikeId").toString()));
+obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));
+obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
+obj.setQuantity(Convert.toInt(map.get("quantity").toString()));
 obj.setStatus(map.get("status").toString());
 obj.setEntryDate(map.get("entryDate").toString());
-obj.setCreatedDate(map.get("createdDate").toString());
-obj.setUpdatedDate(map.get("updatedDate").toString());
-*/
+Date date = new Date();
+obj.setCreatedDate(date);
+//obj.setUpdatedDate(map.get("updatedDate").toString());
+
 
  msg=da.save(obj);
 if(msg.equalsIgnoreCase("Saved"))
 {
-return json.respondWithMessage("Success",da.getAll(" from Parts"));
+return json.respondWithMessage("Inserted Successfully",gson.toJson(da.getAll(" from Parts")));
 }
 return json.respondWithError(msg);
 }
@@ -72,22 +85,23 @@ try{
  map = mapper.readValue(jcson, new TypeReference<Map<String, String>>(){});
 
 model.inventory.Parts obj=new model.inventory.Parts();
-/*obj.setSn(map.get("sn").toString());
+obj.setSn(Convert.toInt(sn));
 obj.setPartsNumber(map.get("partsNumber").toString());
 obj.setName(map.get("name").toString());
-obj.setBikeId(map.get("bikeId").toString());
-obj.setCostPrice(map.get("costPrice").toString());
-obj.setSellingPrice(map.get("sellingPrice").toString());
-obj.setQuantity(map.get("quantity").toString());
-obj.setStatus(map.get("status").toString());
+obj.setBikeId(Convert.toInt(map.get("bikeId").toString()));
+obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));
+//obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
+obj.setQuantity(Convert.toInt(map.get("quantity").toString()));
+//obj.setStatus(map.get("status").toString());
 obj.setEntryDate(map.get("entryDate").toString());
-obj.setCreatedDate(map.get("createdDate").toString());
-obj.setUpdatedDate(map.get("updatedDate").toString());
-*/
+//obj.setCreatedDate(map.get("createdDate").toString());
+Date date = new Date();
+obj.setUpdatedDate(date);
+
  msg=da.update(obj);
 if(msg.equalsIgnoreCase("Updated"))
 {
-return json.respondWithMessage("Updated successfully",da.getAll(" from Parts"));
+return json.respondWithMessage("Parts Updated successfully",gson.toJson(da.getAll(" from Parts")));
 }
 }catch(Exception e){msg=e.getMessage()+" "+jcson;}
 return json.respondWithError(msg);
@@ -100,7 +114,7 @@ public String doDelete(@PathVariable String sn){
 String sql="DELETE FROM parts WHERE SN IN "+sn+" ";
 msg=da.delete(sql);
 if(msg.indexOf("Record Deleted")>=0)
-return json.respondWithMessage("Record Deleted successfully",da.getAll(" from Parts"));else 
+return json.respondWithMessage("Parts Deleted successfully",gson.toJson(da.getAll(" from Parts")));else 
 return json.respondWithError(msg);
 }
 }

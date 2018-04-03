@@ -60,14 +60,14 @@ obj.setQuantity(Convert.toInt(map.get("quantity").toString()));
 obj.setEntryDate(map.get("entryDate").toString());
 Date date = new Date();
 obj.setStatus(map.get("status").toString());
-obj.setCreatedDate(date.toString());
+obj.setCreatedDate(date);
 obj.setUpdatedDate(null);
 
 
  msg=da.save(obj);
 if(msg.equalsIgnoreCase("Saved"))
 {  
-return json.respondWithMessage("Success",gson.toJson(da.getAll(" from Bikes")));
+return json.respondWithMessage("Obtained Successfully",gson.toJson(da.getAll(" from Bikes")));
 }
 return json.respondWithError(msg);
 }
@@ -80,24 +80,25 @@ try{
  map = mapper.readValue(jcson, new TypeReference<Map<String, String>>(){});
 
 model.inventory.Bikes obj=new model.inventory.Bikes();
-/*obj.setSn(map.get("sn").toString());*/
+obj.setSn(Convert.toInt(sn));
 obj.setModel(map.get("model").toString());
 obj.setColor(map.get("color").toString());
 obj.setEngineNumber(map.get("engineNumber").toString());
 obj.setChasisNumber(map.get("chasisNumber").toString());
 obj.setRegNo(map.get("regNo").toString());
 obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));
-obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
+//obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
 obj.setQuantity(Convert.toInt(map.get("quantity").toString()));
 obj.setEntryDate(map.get("entryDate").toString());
-obj.setStatus(map.get("status").toString());
-obj.setCreatedDate(map.get("createdDate").toString());
-obj.setUpdatedDate(map.get("updatedDate").toString());
+//obj.setStatus(map.get("status").toString());
+Date date = new Date();
+//obj.setCreatedDate(date);
+obj.setUpdatedDate(date);
 
  msg=da.update(obj);
 if(msg.equalsIgnoreCase("Updated"))
 {
-return json.respondWithMessage("Updated successfully",gson.toJson(da.getAll(" from Bikes")));
+return json.respondWithMessage("Bike Updated successfully",gson.toJson(da.getAll(" from Bikes")));
 }
 }catch(Exception e){msg=e.getMessage()+" "+jcson;}
 return json.respondWithError(msg);
@@ -110,7 +111,7 @@ public String doDelete(@PathVariable String sn){
 String sql="DELETE FROM bikes WHERE SN IN "+sn+" ";
 msg=da.delete(sql);
 if(msg.indexOf("Record Deleted")>=0)
-return json.respondWithMessage("Record Deleted successfully",gson.toJson(da.getAll(" from Bikes")));
+return json.respondWithMessage("Bike Deleted successfully",gson.toJson(da.getAll(" from Bikes")));
 else 
 return json.respondWithError(msg);
 }

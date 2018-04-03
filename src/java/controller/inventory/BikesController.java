@@ -15,7 +15,9 @@ public String doGet(ModelMap map)
 {
  dao.inventory.DaoBikes da=new dao.inventory.DaoImpBikes(); 
 map.put("Record",da.getAll("from Bikes"));
-return "Inventory/Bikes";  
+//return "Inventory/Bikes"; 
+        return "Sales/bill";
+
 }
 @RequestMapping(value="Inventory/Bikes",method = RequestMethod.POST)
 public String doSave(@ModelAttribute model.inventory.Bikes obj,ModelMap map,@RequestParam String Action)

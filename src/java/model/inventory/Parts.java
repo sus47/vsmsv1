@@ -5,12 +5,15 @@
  */
 package model.inventory;
 
+import cvt.Convert;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -25,7 +28,7 @@ import model.customer.Customers;
 
 /**
  *
- * @author susha
+ * @author sushant
  */
 @Entity
 @Table(name = "parts")
@@ -33,14 +36,10 @@ import model.customer.Customers;
     @NamedQuery(name = "Parts.findAll", query = "SELECT p FROM Parts p")})
 public class Parts implements Serializable {
 
-//    @ManyToMany(mappedBy = "partsCollection")
-//    private Collection<Customers> customersCollection;
-//
-//    @OneToMany(mappedBy = "partsId")
-//    private Collection<PartsPriceUpdates> partsPriceUpdatesCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "SN")
     private Integer sn;
@@ -48,7 +47,6 @@ public class Parts implements Serializable {
     private String partsNumber;
     @Column(name = "NAME")
     private String name;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "COST_PRICE")
     private Float costPrice;
     @Column(name = "SELLING_PRICE")
@@ -58,8 +56,7 @@ public class Parts implements Serializable {
     @Column(name = "STATUS")
     private String status;
     @Column(name = "ENTRY_DATE")
-    @Temporal(TemporalType.DATE)
-    private Date entryDate;
+    private String entryDate;
     @Column(name = "CREATED_DATE")
     @Temporal(TemporalType.DATE)
     private Date createdDate;
@@ -134,11 +131,11 @@ public class Parts implements Serializable {
         this.status = status;
     }
 
-    public Date getEntryDate() {
+    public String getEntryDate() {
         return entryDate;
     }
 
-    public void setEntryDate(Date entryDate) {
+    public void setEntryDate(String entryDate) {
         this.entryDate = entryDate;
     }
 
@@ -187,22 +184,6 @@ public class Parts implements Serializable {
     }
 
   
-
-//    public Collection<PartsPriceUpdates> getPartsPriceUpdatesCollection() {
-//        return partsPriceUpdatesCollection;
-//    }
-//
-//    public void setPartsPriceUpdatesCollection(Collection<PartsPriceUpdates> partsPriceUpdatesCollection) {
-//        this.partsPriceUpdatesCollection = partsPriceUpdatesCollection;
-//    }
-//
-//    public Collection<Customers> getCustomersCollection() {
-//        return customersCollection;
-//    }
-//
-//    public void setCustomersCollection(Collection<Customers> customersCollection) {
-//        this.customersCollection = customersCollection;
-//    }
 
     @Override
     public String toString() {

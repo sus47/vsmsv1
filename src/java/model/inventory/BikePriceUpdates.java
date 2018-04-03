@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,6 +33,7 @@ public class BikePriceUpdates implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "SN")
     private Integer sn;
@@ -44,7 +47,7 @@ public class BikePriceUpdates implements Serializable {
     private Date updatedDate;
 //    @JoinColumn(name = "BIKE_ID", referencedColumnName = "SN")
 //    @ManyToOne(optional = false)
-    @Column(name="BIKE_ID")
+    @Column(name = "BIKE_ID")
     private int bikeId;
 
     public BikePriceUpdates() {
@@ -118,5 +121,5 @@ public class BikePriceUpdates implements Serializable {
     public String toString() {
         return "model.inventory.BikePriceUpdates[ sn=" + sn + " ]";
     }
-    
+
 }

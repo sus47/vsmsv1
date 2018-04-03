@@ -66,8 +66,7 @@ public class Bikes implements Serializable {
     @Column(name = "QUANTITY")
     private Integer quantity;
     @Column(name = "ENTRY_DATE")
-    @Temporal(TemporalType.DATE)
-    private Date entryDate;
+    private String entryDate;
     @Column(name = "STATUS")
     private String status;
     @Column(name = "CREATED_DATE")
@@ -156,12 +155,12 @@ public class Bikes implements Serializable {
         this.quantity = quantity;
     }
 
-    public Date getEntryDate() {
+    public String getEntryDate() {
         return entryDate;
     }
 
     public void setEntryDate(String entryDate) {
-        this.entryDate = Convert.toDate(entryDate);
+        this.entryDate = entryDate;
     }
 
     public String getStatus() {
@@ -176,16 +175,16 @@ public class Bikes implements Serializable {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = Convert.toDate(createdDate);
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Date getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = Convert.toDate(updatedDate);
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
