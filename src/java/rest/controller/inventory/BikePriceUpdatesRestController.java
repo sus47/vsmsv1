@@ -50,6 +50,7 @@ public class BikePriceUpdatesRestController {
         dao.inventory.DaoBikes da = new dao.inventory.DaoImpBikes();
         String bikeId = "", oldPrice = "", newPrice = "";
         String sql = "", updateSql = "";
+        try{
         String jcsonArray[] = cvt.ConvertJsonArrayToString.convert(jcson);
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -97,7 +98,10 @@ public class BikePriceUpdatesRestController {
             msg = General.update(updateSql);
             System.out.println(msg);
         }
-
+        }catch(Exception e){
+            msg = e.getMessage();
+            return json.respondWithError(msg);
+        }
         if (msg.indexOf("Updated") > 0) {
             msg.replaceAll("updated", "saved");
             return json.respondWithMessage("Success", gson.toJson(da.getAll(" from BikePriceUpdates")));

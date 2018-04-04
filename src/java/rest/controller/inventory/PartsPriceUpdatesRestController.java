@@ -46,6 +46,7 @@ public class PartsPriceUpdatesRestController {
         dao.inventory.DaoParts da = new dao.inventory.DaoImpParts();
         String partId = "", oldPrice = "", newPrice = "";
         String sql = "", updateSql = "";
+        try{
         String jcsonArray[] = cvt.ConvertJsonArrayToString.convert(jcson);
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -53,7 +54,7 @@ public class PartsPriceUpdatesRestController {
         map = mapper.readValue(jcsonArray[0], new TypeReference<Map<String, String>>() {
         });
         com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
-        List list = objectMapper.readValue(jcsonArray[1], new com.fasterxml.jackson.core.type.TypeReference<List>() {
+        List list = objectMapper.readValue(jcsonArray[0], new com.fasterxml.jackson.core.type.TypeReference<List>() {
         });
         System.out.println(list);
 
@@ -93,7 +94,10 @@ public class PartsPriceUpdatesRestController {
             msg = General.update(updateSql);
             System.out.println(msg);
         }
-
+        }catch(Exception e){
+            msg = e.getMessage();
+            return json.respondWithError(msg);
+        }
         if (msg.indexOf("Updated") > 0) {
             msg.replaceAll("updated", "saved");
             return json.respondWithMessage("Success", gson.toJson(da.getAll(" from PartsPriceUpdates")));
