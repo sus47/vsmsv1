@@ -34,17 +34,18 @@ public class PartsPriceUpdatesRestController {
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
 
-    @RequestMapping(value = "api/inventory/partspriceupdates", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public String index() {
-        return json.respondWithMessage("Success", gson.toJson(da.getAll("from PartsPriceUpdates")));
-    }
+//    @RequestMapping(value = "api/inventory/partspriceupdates", method = RequestMethod.GET, produces = "application/json")
+//    @ResponseBody
+//    public String index() {
+//        return json.respondWithMessage("Success", gson.toJson(da.getAll("from PartsPriceUpdates")));
+//    }
 
     @RequestMapping(value = "api/inventory/partspriceupdates", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public String doSave(@RequestBody String jcson) throws IOException {
-        dao.inventory.DaoParts da = new dao.inventory.DaoImpParts();
-        String partId = "", oldPrice = "", newPrice = "";
+        System.out.println(jcson);
+//        dao.inventory.DaoParts dap = new dao.inventory.DaoImpParts();
+        String partsId = "", oldPrice = "", newPrice = "";
         String sql = "", updateSql = "";
         try{
         String jcsonArray[] = cvt.ConvertJsonArrayToString.convert(jcson);
@@ -54,7 +55,7 @@ public class PartsPriceUpdatesRestController {
         map = mapper.readValue(jcsonArray[0], new TypeReference<Map<String, String>>() {
         });
         com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
-        List list = objectMapper.readValue(jcsonArray[0], new com.fasterxml.jackson.core.type.TypeReference<List>() {
+        List list = objectMapper.readValue(jcsonArray[1], new com.fasterxml.jackson.core.type.TypeReference<List>() {
         });
         System.out.println(list);
 
@@ -68,8 +69,8 @@ public class PartsPriceUpdatesRestController {
                 Map row = (Map) object;
 
                 try {
-                    partId = row.get("sn").toString();
-                    System.out.println(partId);
+                    partsId = row.get("sn").toString();
+                    System.out.println(partsId);
                 } catch (Exception e) {
                 }
                 try {
@@ -85,8 +86,8 @@ public class PartsPriceUpdatesRestController {
 
             } catch (Exception Ex) {
             }
-            sql += " (" + partId + "," + newPrice + "," + oldPrice + ", now())";
-            updateSql += "SELLING_PRICE=" + newPrice + ", UPDATED_DATE= now() WHERE SN = " + partId + "";
+            sql += " (" + partsId + "," + newPrice + "," + oldPrice + ", now())";
+            updateSql += "SELLING_PRICE=" + newPrice + ", UPDATED_DATE= now() WHERE SN = " + partsId + "";
             System.out.println(sql);
 
             msg = General.update(sql);

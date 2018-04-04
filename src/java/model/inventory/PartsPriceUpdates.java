@@ -45,9 +45,10 @@ public class PartsPriceUpdates implements Serializable {
     @Column(name = "UPDATED_DATE")
     @Temporal(TemporalType.DATE)
     private Date updatedDate;
-    @JoinColumn(name = "PARTS_ID", referencedColumnName = "SN")
-    @ManyToOne
-    private Parts partsId;
+//    @JoinColumn(name = "PARTS_ID", referencedColumnName = "SN")
+//    @ManyToOne
+    @Column(name="PARTS_ID")
+    private int partsId;
 
     public PartsPriceUpdates() {
     }
@@ -88,14 +89,15 @@ public class PartsPriceUpdates implements Serializable {
         this.updatedDate = updatedDate;
     }
 
-    public Parts getPartsId() {
+    public int getPartsId() {
         return partsId;
     }
 
-    public void setPartsId(Parts partsId) {
+    public void setPartsId(int partsId) {
         this.partsId = partsId;
     }
 
+    
     @Override
     public int hashCode() {
         int hash = 0;

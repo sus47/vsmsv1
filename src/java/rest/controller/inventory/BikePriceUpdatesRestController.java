@@ -38,16 +38,10 @@ public class BikePriceUpdatesRestController {
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
 
-    @RequestMapping(value = "api/inventory/bikepriceupdates", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public String index() {
-        return json.respondWithMessage("Success", gson.toJson(da.getAll("from BikePriceUpdates")));
-    }
-
     @RequestMapping(value = "api/inventory/bikepriceupdates", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public String doSave(@RequestBody String jcson) throws IOException {
-        dao.inventory.DaoBikes da = new dao.inventory.DaoImpBikes();
+        System.out.println(jcson);
         String bikeId = "", oldPrice = "", newPrice = "";
         String sql = "", updateSql = "";
         try{
