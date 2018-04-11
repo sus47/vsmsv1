@@ -8,12 +8,15 @@
     <property name="hibernate.connection.username">system</property>
     <property name="hibernate.connection.password">manager</property>
     <property name="show_sql">true</property>
-        <property name="hibernate.hbm2ddl.auto">create</property>
+    <property name="hibernate.hbm2ddl.auto">create</property>
     <property name="hibernate.transaction.auto_close_session">true</property>
     <property name="hibernate.transaction.flush_before_completion">true</property>
     <mapping class="model.inventory.Bikes"/>
     <mapping class="model.inventory.Parts"/>
     <mapping class="model.inventory.BikePriceUpdates"/>
     <mapping class="model.inventory.PartsPriceUpdates"/>
+    <mapping class="model.bills.Bills"/>
+    <mapping class="model.sales.BikesSales"/>
+    <mapping class="model.sales.PartsSales"/>
   </session-factory>
 </hibernate-configuration>

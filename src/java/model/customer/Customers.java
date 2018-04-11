@@ -10,6 +10,8 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -17,9 +19,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import model.inventory.Bikes;
 import model.inventory.Parts;
+import model.sales.PartsSales;
 
 /**
  *
@@ -31,11 +35,21 @@ import model.inventory.Parts;
     @NamedQuery(name = "Customers.findAll", query = "SELECT c FROM Customers c")})
 public class Customers implements Serializable {
 
+//    @OneToMany(mappedBy = "customerId")
+//    private Collection<PartsSales> partsSalesCollection;
+//    @JoinColumn(name = "BIKES_ID", referencedColumnName = "SN")
+//    @ManyToOne
+    
+    private int bikeId;
+
     private static final long serialVersionUID = 1L;
-    @Id
+     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    @Column(name="CUS_ID")
+    private String customerId;
     @Column(name = "NAME")
     private String name;
     @Column(name = "ADDRESS")
@@ -45,12 +59,9 @@ public class Customers implements Serializable {
     @Column(name = "PAN")
     private Integer pan;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "PAYMENT")
-    private Float payment;
-    @Column(name = "DUE_AMOUNT")
-    private Float dueAmount;
+ 
     @Column(name = "INVOICE")
-    private Integer invoice;
+    private String invoice;
 //    @JoinTable(name = "customer_parts_purchase", joinColumns = {
 //        @JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
 //        @JoinColumn(name = "PARTS_ID", referencedColumnName = "SN")})
@@ -75,6 +86,15 @@ public class Customers implements Serializable {
         this.id = id;
     }
 
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    
     public String getName() {
         return name;
     }
@@ -107,28 +127,21 @@ public class Customers implements Serializable {
         this.pan = pan;
     }
 
-    public Float getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Float payment) {
-        this.payment = payment;
-    }
-
-    public Float getDueAmount() {
-        return dueAmount;
-    }
-
-    public void setDueAmount(Float dueAmount) {
-        this.dueAmount = dueAmount;
-    }
-
-    public Integer getInvoice() {
+ 
+    public String getInvoice() {
         return invoice;
     }
 
-    public void setInvoice(Integer invoice) {
+    public void setInvoice(String invoice) {
         this.invoice = invoice;
+    }
+
+    public int getBikeId() {
+        return bikeId;
+    }
+
+    public void setBikeId(int bikeId) {
+        this.bikeId = bikeId;
     }
 
 //    public Collection<Parts> getPartsCollection() {
@@ -171,5 +184,7 @@ public class Customers implements Serializable {
     public String toString() {
         return "model.customer.Customers[ id=" + id + " ]";
     }
+
+  
     
 }

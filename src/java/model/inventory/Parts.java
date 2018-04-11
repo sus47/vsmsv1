@@ -25,6 +25,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import model.customer.Customers;
+import model.sales.PartsSales;
 
 /**
  *
@@ -35,6 +36,12 @@ import model.customer.Customers;
 @NamedQueries({
     @NamedQuery(name = "Parts.findAll", query = "SELECT p FROM Parts p")})
 public class Parts implements Serializable {
+
+//    @OneToMany(mappedBy = "partsId")
+//    private Collection<PartsSales> partsSalesCollection;
+//    @JoinColumn(name = "BIKE_ID", referencedColumnName = "SN")
+//    @ManyToOne
+//    private Bikes bikeId;
 
 
     private static final long serialVersionUID = 1L;
@@ -189,5 +196,21 @@ public class Parts implements Serializable {
     public String toString() {
 return "\n{\"sn\": \""+sn+"\",\"partsNumber\": \""+partsNumber+"\",\"name\": \""+name+"\",\"bikeId\": \""+bikeId+"\",\"costPrice\": \""+costPrice+"\",\"sellingPrice\": \""+sellingPrice+"\",\"quantity\": \""+quantity+"\",\"status\": \""+status+"\",\"entryDate\": \""+entryDate+"\",\"createdDate\": \""+createdDate+"\",\"updatedDate\": \""+updatedDate+"\"}";
     }
+
+//    public Collection<PartsSales> getPartsSalesCollection() {
+//        return partsSalesCollection;
+//    }
+//
+//    public void setPartsSalesCollection(Collection<PartsSales> partsSalesCollection) {
+//        this.partsSalesCollection = partsSalesCollection;
+//    }
+//
+//    public Bikes getBikeId() {
+//        return bikeId;
+//    }
+//
+//    public void setBikeId(Bikes bikeId) {
+//        this.bikeId = bikeId;
+//    }
 
 }

@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import model.customer.Customers;
+import model.sales.BikesSales;
 
 /**
  *
@@ -34,14 +35,6 @@ import model.customer.Customers;
     @NamedQuery(name = "Bikes.findAll", query = "SELECT b FROM Bikes b")})
 public class Bikes implements Serializable {
 
-//    @OneToMany(mappedBy = "bikesId")
-//    private Collection<Customers> customersCollection;
-//
-//
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bikeId")
-//    private Collection<BikePriceUpdates> bikePriceUpdatesCollection;
-//    @OneToMany(mappedBy = "bikeId")
-//    private Collection<Parts> partsCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

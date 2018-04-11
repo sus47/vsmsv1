@@ -24,6 +24,9 @@
     <class>model.inventory.PartsPriceUpdates</class>
     <class>rest.controller.customer.Customers</class>
     <class>model.customer.Customers</class>
+    <class>model.sales.BikesSales</class>
+    <class>model.sales.PartsSales</class>
+    <class>model.bills.Bills</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/rps"/>

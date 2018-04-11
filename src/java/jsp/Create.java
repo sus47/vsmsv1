@@ -21,9 +21,9 @@ password="manager";
 String tabName,fileName,packageName;
 
 
-tabName="customers";
-fileName="Customers";
-packageName="Customer";
+tabName="bills";
+fileName="Bills";
+packageName="Bills";
 
 
 new Create(tabName, fileName,packageName);
