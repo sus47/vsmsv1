@@ -151,11 +151,9 @@ public class BikesSalesRestController {
                     sqlBikeSale+="("+bikeId+",'"+customerId+"',"+discount+",'"+invoice+"',"+price+","+quantity+",'admin',now(),now())";
                      bikeUpdate+="QUANTITY=QUANTITY-"+quantity+", UPDATED_DATE=now() WHERE SN="+bikeId+"";
                     sqlBill+="('"+address+"',"+advance+","+bikeId+",now(),'"+customerId+"','"+customerName+"','"+cusType+"',"+discount+","+dueAmount+",'"+invoice+"',"+netTotal+",'"+orgType+"',"+pan+",'"+phone+"',"+quantity+","+sellingPrice+","+vat+","+total+")";
-                  if(cusType=="N"){
                     msg = General.update(sql);
                      System.out.println(msg);
-                  }else{
-                  }
+                  
                      msg = General.update(sqlBikeSale);
                      System.out.println(msg);
                      msg = General.update(bikeUpdate);

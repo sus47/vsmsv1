@@ -18,5 +18,6 @@
     <mapping class="model.bills.Bills"/>
     <mapping class="model.sales.BikesSales"/>
     <mapping class="model.sales.PartsSales"/>
+    <mapping class="model.inventory.Ledger"/>
   </session-factory>
 </hibernate-configuration>

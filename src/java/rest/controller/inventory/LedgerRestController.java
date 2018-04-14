@@ -4,10 +4,13 @@ return "\n{\"sn\": \""+sn+"\",\"cusId\": \""+cusId+"\",\"staffId\": \""+staffId+
 
 package rest.controller.inventory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import model.assign.CourseGroup;
+import model.DB;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.ui.Model;
@@ -27,13 +30,18 @@ public class LedgerRestController {
 ObjectMapper mapper = new ObjectMapper();  
 dao.inventory.DaoLedger da=new dao.inventory.DaoImpLedger(); 
 ApiBaseController json=new ApiBaseController();
+DB db = new DB();
 String msg="";
-
+GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson gson = gsonBuilder.create();
 @RequestMapping(value = "api/inventory/ledger", method = RequestMethod.GET, produces = "application/json")
 @ResponseBody
 public String index()
 {
-return json.respondWithMessage("Success",da.getAll("from Ledger"));
+    String sql = "SELECT CUS_ID AS customerId, GET_CUSTOMER_NAME(CUS_ID) AS customerName,GET_CUSTOMER_NAME(STAFF_ID) AS staffName, DEBIT debit, CREDIT credit FROM ledger";
+    List list = db.getRecord(sql);
+    return json.respondWithMessage("Success", gson.toJson(list));
+//return json.respondWithMessage("Success",da.getAll("from Ledger"));
 }
     
 @RequestMapping(value = "api/inventory/ledger", method = RequestMethod.POST, produces = "application/json")

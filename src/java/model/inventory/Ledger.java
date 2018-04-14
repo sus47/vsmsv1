@@ -135,7 +135,7 @@ public class Ledger implements Serializable {
 
     @Override
     public String toString() {
-        return "model.inventory.Ledger[ sn=" + sn + " ]";
+        return "\n{\"sn\": \"" + sn + "\",\"cusId\": \"" + cusId + "\",\"staffId\": \"" + staffId + "\",\"description\": \"" + description + "\",\"debit\": \"" + debit + "\",\"credit\": \"" + credit + "\",\"createdDate\": \"" + createdDate + "\"}";
     }
-    
+
 }
