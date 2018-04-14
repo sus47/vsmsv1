@@ -40,17 +40,17 @@ public class PartsSales implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRICE")
     private Float price;
+     @Column(name = "DISCOUNT")
+    private Float discount;
+      @Column(name = "INVOICE")
+    private String invoice;
     @Column(name = "SOLD_BY")
     private String soldBy;
     @Column(name = "SOLD_DATE")
     @Temporal(TemporalType.DATE)
     private Date soldDate;
-//    @JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID")
-//    @ManyToOne
     @Column(name="CUSTOMER_ID")
     private String customerId;
-//    @JoinColumn(name = "PARTS_ID", referencedColumnName = "SN")
-//    @ManyToOne
     @Column(name="PARTS_ID")
     private int partsId;
 
@@ -117,6 +117,23 @@ public class PartsSales implements Serializable {
         this.partsId = partsId;
     }
 
+    public Float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
+    }
+
+    public String getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(String invoice) {
+        this.invoice = invoice;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;

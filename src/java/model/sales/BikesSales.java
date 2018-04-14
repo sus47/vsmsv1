@@ -57,6 +57,9 @@ public class BikesSales implements Serializable {
     @Column (name="BIKE_ID")
     private int bikeId;
 
+    @Column(name="CREATED_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
     @Column(name="INVOICE")
     private String invoice;
     public BikesSales() {
@@ -136,6 +139,14 @@ public class BikesSales implements Serializable {
 
     public void setInvoice(String invoice) {
         this.invoice = invoice;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     

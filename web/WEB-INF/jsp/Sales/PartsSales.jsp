@@ -1,5 +1,5 @@
 <%@include file="../login/header.jsp" %>
- <center><h3><label><u>ExamSubject</u></label></h3></center>
+ <center><h3><label><u>PartsSales</u></label></h3></center>
 <form method='POST'> 
 <div class="row">
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
@@ -7,40 +7,36 @@
 <input type='text' name='sn' id='sn'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Subject Com Sn</label>
-<input type='text' name='subjectComSn' id='subjectComSn'  class='form-control'/>
+<label>Customer Id</label>
+<input type='text' name='customerId' id='customerId'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Subject Opt Sn</label>
-<input type='text' name='subjectOptSn' id='subjectOptSn'  class='form-control'/>
+<label>Parts Id</label>
+<input type='text' name='partsId' id='partsId'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Exam Id Es Reg</label>
-<input type='text' name='examIdEsReg' id='examIdEsReg'  class='form-control'/>
+<label>Price</label>
+<input type='text' name='price' id='price'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Grading Type</label>
-<input type='text' name='gradingType' id='gradingType'  class='form-control'/>
+<label>Quantity</label>
+<input type='text' name='quantity' id='quantity'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Th Fm</label>
-<input type='text' name='thFm' id='thFm'  class='form-control'/>
+<label>Sold By</label>
+<input type='text' name='soldBy' id='soldBy'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Th Pm</label>
-<input type='text' name='thPm' id='thPm'  class='form-control'/>
+<label>Sold Date</label>
+<input type='text' name='soldDate' id='soldDate'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Ph Fm</label>
-<input type='text' name='phFm' id='phFm'  class='form-control'/>
+<label>Discount</label>
+<input type='text' name='discount' id='discount'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Ph Pm</label>
-<input type='text' name='phPm' id='phPm'  class='form-control'/>
-</div>
-<div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>In Order</label>
-<input type='text' name='inOrder' id='inOrder'  class='form-control'/>
+<label>Invoice</label>
+<input type='text' name='invoice' id='invoice'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
   
@@ -53,36 +49,34 @@
 <table class='table table-striped table-hover table-bordered' id='dataTable'>
 <tr>
 <th>Sn</th>
-<th>Subject Com Sn</th>
-<th>Subject Opt Sn</th>
-<th>Exam Id Es Reg</th>
-<th>Grading Type</th>
-<th>Th Fm</th>
-<th>Th Pm</th>
-<th>Ph Fm</th>
-<th>Ph Pm</th>
-<th>In Order</th>
+<th>Customer Id</th>
+<th>Parts Id</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>Sold By</th>
+<th>Sold Date</th>
+<th>Discount</th>
+<th>Invoice</th>
 <th>Action</th>
 </tr> 
 <c:forEach  var="rst" items="${Record}" varStatus="i" >
  <tr> 
 <td>${rst.sn}</td>
-<td>${rst.subjectComSn}</td>
-<td>${rst.subjectOptSn}</td>
-<td>${rst.examIdEsReg}</td>
-<td>${rst.gradingType}</td>
-<td>${rst.thFm}</td>
-<td>${rst.thPm}</td>
-<td>${rst.phFm}</td>
-<td>${rst.phPm}</td>
-<td>${rst.inOrder}</td>
+<td>${rst.customerId}</td>
+<td>${rst.partsId}</td>
+<td>${rst.price}</td>
+<td>${rst.quantity}</td>
+<td>${rst.soldBy}</td>
+<td>${rst.soldDate}</td>
+<td>${rst.discount}</td>
+<td>${rst.invoice}</td>
 <td><a onclick='edit(${i.index+1})' class='glyphicon glyphicon-edit'></a> | <a onclick='recordDelete(${i.index+1})' class='glyphicon glyphicon-remove-circle'></a></td>
  </tr>
  </c:forEach>
   </table>
 </div> <script>
 function edit(sn){
-var id = ['sn','subjectComSn','subjectOptSn','examIdEsReg','gradingType','thFm','thPm','phFm','phPm','inOrder'];
+var id = ['sn','customerId','partsId','price','quantity','soldBy','soldDate','discount','invoice'];
 for( var i=0;i<id.length;i++)
 document.getElementById(id[i]).value=document.getElementById("dataTable").rows[sn].cells.item(i).innerHTML;
 document.getElementById('Action').value='Update';
@@ -90,7 +84,7 @@ document.getElementById('ActionMSG').innerHTML='&nbsp;';
 document.getElementById('Action').focus();
 }
 function recordDelete(sn){
-var id = ['sn','subjectComSn','subjectOptSn','examIdEsReg','gradingType','thFm','thPm','phFm','phPm','inOrder'];
+var id = ['sn','customerId','partsId','price','quantity','soldBy','soldDate','discount','invoice'];
 for( var i=0;i<id.length;i++)
 document.getElementById(id[i]).value=document.getElementById("dataTable").rows[sn].cells.item(i).innerHTML;
 document.getElementById('Action').value='Delete'; 
@@ -102,5 +96,5 @@ document.getElementById('Action').focus();
 
 
 <%--
-return "\n{\"sn\": \""+sn+"\",\"subjectComSn\": \""+subjectComSn+"\",\"subjectOptSn\": \""+subjectOptSn+"\",\"examIdEsReg\": \""+examIdEsReg+"\",\"gradingType\": \""+gradingType+"\",\"thFm\": \""+thFm+"\",\"thPm\": \""+thPm+"\",\"phFm\": \""+phFm+"\",\"phPm\": \""+phPm+"\",\"inOrder\": \""+inOrder+"\"}";
+return "\n{\"sn\": \""+sn+"\",\"customerId\": \""+customerId+"\",\"partsId\": \""+partsId+"\",\"price\": \""+price+"\",\"quantity\": \""+quantity+"\",\"soldBy\": \""+soldBy+"\",\"soldDate\": \""+soldDate+"\",\"discount\": \""+discount+"\",\"invoice\": \""+invoice+"\"}";
 --%>

@@ -69,6 +69,8 @@ public class Bills implements Serializable {
     private Float totalSp;
     @Column(name = "VAT")
     private Float vat;
+    @Column(name = "TOTAL")
+    private Float total;
     @Column(name = "NET_TOTAL")
     private Float netTotal;
     @Column(name = "ADVANCE")

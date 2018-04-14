@@ -1,26 +1,34 @@
 <%@include file="../login/header.jsp" %>
- <center><h3><label><u>ExamResultDetails</u></label></h3></center>
+ <center><h3><label><u>Ledger</u></label></h3></center>
 <form method='POST'> 
 <div class="row">
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Mark Id</label>
-<input type='text' name='markId' id='markId'  class='form-control'/>
+<label>Sn</label>
+<input type='text' name='sn' id='sn'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Exam Subject Sn</label>
-<input type='text' name='examSubjectSn' id='examSubjectSn'  class='form-control'/>
+<label>Cus Id</label>
+<input type='text' name='cusId' id='cusId'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Exam Result Sn</label>
-<input type='text' name='examResultSn' id='examResultSn'  class='form-control'/>
+<label>Staff Id</label>
+<input type='text' name='staffId' id='staffId'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Th Om</label>
-<input type='text' name='thOm' id='thOm'  class='form-control'/>
+<label>Description</label>
+<input type='text' name='description' id='description'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
-<label>Ph Om</label>
-<input type='text' name='phOm' id='phOm'  class='form-control'/>
+<label>Debit</label>
+<input type='text' name='debit' id='debit'  class='form-control'/>
+</div>
+<div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
+<label>Credit</label>
+<input type='text' name='credit' id='credit'  class='form-control'/>
+</div>
+<div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
+<label>Created Date</label>
+<input type='text' name='createdDate' id='createdDate'  class='form-control'/>
 </div>
 <div class='col-lg-3 col-sm-3 col-md-3 col-xs-6'>
   
@@ -32,27 +40,31 @@
  <div class='row'>
 <table class='table table-striped table-hover table-bordered' id='dataTable'>
 <tr>
-<th>Mark Id</th>
-<th>Exam Subject Sn</th>
-<th>Exam Result Sn</th>
-<th>Th Om</th>
-<th>Ph Om</th>
+<th>Sn</th>
+<th>Cus Id</th>
+<th>Staff Id</th>
+<th>Description</th>
+<th>Debit</th>
+<th>Credit</th>
+<th>Created Date</th>
 <th>Action</th>
 </tr> 
 <c:forEach  var="rst" items="${Record}" varStatus="i" >
  <tr> 
-<td>${rst.markId}</td>
-<td>${rst.examSubjectSn}</td>
-<td>${rst.examResultSn}</td>
-<td>${rst.thOm}</td>
-<td>${rst.phOm}</td>
+<td>${rst.sn}</td>
+<td>${rst.cusId}</td>
+<td>${rst.staffId}</td>
+<td>${rst.description}</td>
+<td>${rst.debit}</td>
+<td>${rst.credit}</td>
+<td>${rst.createdDate}</td>
 <td><a onclick='edit(${i.index+1})' class='glyphicon glyphicon-edit'></a> | <a onclick='recordDelete(${i.index+1})' class='glyphicon glyphicon-remove-circle'></a></td>
  </tr>
  </c:forEach>
   </table>
 </div> <script>
 function edit(sn){
-var id = ['markId','examSubjectSn','examResultSn','thOm','phOm'];
+var id = ['sn','cusId','staffId','description','debit','credit','createdDate'];
 for( var i=0;i<id.length;i++)
 document.getElementById(id[i]).value=document.getElementById("dataTable").rows[sn].cells.item(i).innerHTML;
 document.getElementById('Action').value='Update';
@@ -60,7 +72,7 @@ document.getElementById('ActionMSG').innerHTML='&nbsp;';
 document.getElementById('Action').focus();
 }
 function recordDelete(sn){
-var id = ['markId','examSubjectSn','examResultSn','thOm','phOm'];
+var id = ['sn','cusId','staffId','description','debit','credit','createdDate'];
 for( var i=0;i<id.length;i++)
 document.getElementById(id[i]).value=document.getElementById("dataTable").rows[sn].cells.item(i).innerHTML;
 document.getElementById('Action').value='Delete'; 
@@ -72,5 +84,5 @@ document.getElementById('Action').focus();
 
 
 <%--
-return "\n{\"markId\": \""+markId+"\",\"examSubjectSn\": \""+examSubjectSn+"\",\"examResultSn\": \""+examResultSn+"\",\"thOm\": \""+thOm+"\",\"phOm\": \""+phOm+"\"}";
+return "\n{\"sn\": \""+sn+"\",\"cusId\": \""+cusId+"\",\"staffId\": \""+staffId+"\",\"description\": \""+description+"\",\"debit\": \""+debit+"\",\"credit\": \""+credit+"\",\"createdDate\": \""+createdDate+"\"}";
 --%>

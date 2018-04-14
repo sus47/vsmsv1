@@ -55,6 +55,7 @@ public class BikePriceUpdatesRestController {
         List list = objectMapper.readValue(jcsonArray[1], new com.fasterxml.jackson.core.type.TypeReference<List>() {
         });
         System.out.println(list);
+        System.out.println("size of list is: "+list.size());
 
         for (int i = 0; i < list.size(); i++) {
             sql = "insert into bike_price_updates (BIKE_ID, NEW_PRICE, OLD_PRICE, UPDATED_DATE) values";
