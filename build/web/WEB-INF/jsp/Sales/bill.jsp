@@ -1,4 +1,5 @@
 
+<%@page import="java.util.Date"%>
 <%@include file="../login/header.jsp" %>
 <!doctype html>
 <html lang="en">
@@ -33,9 +34,11 @@
                     </div>
                     <div class="col-xs-3 text-center">
                         <p>
-                            Invoice: #INVB001<br/>
-                            CustomerID: #CUS001<br/>
-                            Date: 2074/12/19</p>
+                            Invoice: #${bill.invoice}<br/>
+                            CustomerID: #${bill.customerId}<br/>
+                            Date: <%
+                                Date date = new Date();
+                                out.print(date);%></p>
                     </div>
 
                 </div>
@@ -49,13 +52,13 @@
                 <div class="col-xs-5">
                     <div class="panel panel-default">
                         <div class="panel-heading" style="padding: 0;">
-                            <p style="font-size:16px;">Customer Name: Sushant Thapa</h4>
+                            <p style="font-size:16px;">Customer Name: ${bill.name}</h4>
                         </div>
                         <div class="panel-body" style="padding:0;">
                             <p>
-                                Kamalamai-06, Sindhuli <br>
-                                Phone: 9864736255 <br>
-                                <span class="pan">PAN No/VAT No: </span><br>
+                                ${bill.address} <br>
+                                Phone: ${bill.phone} <br>
+                                <span class="pan">PAN No/VAT No: ${bill.panNumber} </span><br>
                             </p>
                         </div>
                     </div>
@@ -103,14 +106,15 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <c:foreach items="${bill}" var ="bill" varStatus ="counter">
                     <tr>
-                        <td>1</td>
-                        <td>HM00381 </td>
-                        <td><a href="#">Red Helmet of TVS Bike</a></td>
-                        <td class="text-right">1</td>
-                        <td class="text-right">Rs.200.00</td>
-                        <td class="text-right">Rs.10.00</td>
-                        <td class="text-right">Rs.190.00</td>
+                        <td>${counter.count}</td>
+                        <td>${bill.partNumber}</td>
+                        <td><a href="#">${bill.partName}</a></td>
+                        <td class="text-right">${bill.quantity}</td>
+                        <td class="text-right">${bill.price}</td>
+                        <td class="text-right">${bill.discount}</td>
+                        <td class="text-right">${bill.totalSellingPrice}</td>
                     </tr>
 
                 </tbody>

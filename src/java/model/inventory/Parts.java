@@ -37,13 +37,6 @@ import model.sales.PartsSales;
     @NamedQuery(name = "Parts.findAll", query = "SELECT p FROM Parts p")})
 public class Parts implements Serializable {
 
-//    @OneToMany(mappedBy = "partsId")
-//    private Collection<PartsSales> partsSalesCollection;
-//    @JoinColumn(name = "BIKE_ID", referencedColumnName = "SN")
-//    @ManyToOne
-//    private Bikes bikeId;
-
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -60,6 +53,8 @@ public class Parts implements Serializable {
     private Float sellingPrice;
     @Column(name = "QUANTITY")
     private Integer quantity;
+    @Column(name = "THRESHOLD")
+    private Integer threshold;
     @Column(name = "STATUS")
     private String status;
     @Column(name = "ENTRY_DATE")
@@ -70,9 +65,8 @@ public class Parts implements Serializable {
     @Column(name = "UPDATED_DATE")
     @Temporal(TemporalType.DATE)
     private Date updatedDate;
-//    @JoinColumn(name = "BIKE_ID", referencedColumnName = "SN")
-//    @ManyToOne
-    @Column(name="BIKE_ID")
+
+    @Column(name = "BIKE_ID")
     private int bikeId;
 
     public Parts() {
@@ -128,6 +122,14 @@ public class Parts implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(Integer threshold) {
+        this.threshold = threshold;
     }
 
     public String getStatus() {
@@ -190,27 +192,9 @@ public class Parts implements Serializable {
         return true;
     }
 
-  
-
     @Override
     public String toString() {
-return "\n{\"sn\": \""+sn+"\",\"partsNumber\": \""+partsNumber+"\",\"name\": \""+name+"\",\"bikeId\": \""+bikeId+"\",\"costPrice\": \""+costPrice+"\",\"sellingPrice\": \""+sellingPrice+"\",\"quantity\": \""+quantity+"\",\"status\": \""+status+"\",\"entryDate\": \""+entryDate+"\",\"createdDate\": \""+createdDate+"\",\"updatedDate\": \""+updatedDate+"\"}";
+        return "\n{\"sn\": \"" + sn + "\",\"partsNumber\": \"" + partsNumber + "\",\"name\": \"" + name + "\",\"bikeId\": \"" + bikeId + "\",\"costPrice\": \"" + costPrice + "\",\"sellingPrice\": \"" + sellingPrice + "\",\"quantity\": \"" + quantity + "\",\"status\": \"" + status + "\",\"entryDate\": \"" + entryDate + "\",\"createdDate\": \"" + createdDate + "\",\"updatedDate\": \"" + updatedDate + "\"}";
     }
-
-//    public Collection<PartsSales> getPartsSalesCollection() {
-//        return partsSalesCollection;
-//    }
-//
-//    public void setPartsSalesCollection(Collection<PartsSales> partsSalesCollection) {
-//        this.partsSalesCollection = partsSalesCollection;
-//    }
-//
-//    public Bikes getBikeId() {
-//        return bikeId;
-//    }
-//
-//    public void setBikeId(Bikes bikeId) {
-//        this.bikeId = bikeId;
-//    }
 
 }

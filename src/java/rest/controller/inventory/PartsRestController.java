@@ -58,6 +58,7 @@ model.inventory.Parts obj=new model.inventory.Parts();
 /*obj.setSn(map.get("sn").toString());*/
 obj.setPartsNumber(map.get("partsNumber").toString());
 obj.setName(map.get("name").toString());
+obj.setThreshold(Convert.toInt(map.get("threshold").toString()));
 obj.setBikeId(Convert.toInt(map.get("bikeId").toString()));
 obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));
 obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
