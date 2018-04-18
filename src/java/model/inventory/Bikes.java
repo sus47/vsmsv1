@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import model.customer.Customers;
+import model.consumer.Customers;
 import model.sales.BikesSales;
 
 /**
@@ -200,29 +200,6 @@ public class Bikes implements Serializable {
         return true;
     }
 
-//    public Collection<BikePriceUpdates> getBikePriceUpdatesCollection() {
-//        return bikePriceUpdatesCollection;
-//    }
-//
-//    public void setBikePriceUpdatesCollection(Collection<BikePriceUpdates> bikePriceUpdatesCollection) {
-//        this.bikePriceUpdatesCollection = bikePriceUpdatesCollection;
-//    }
-//
-//    public Collection<Parts> getPartsCollection() {
-//        return partsCollection;
-//    }
-//
-//    public void setPartsCollection(Collection<Parts> partsCollection) {
-//        this.partsCollection = partsCollection;
-//    }
-//
-//    public Collection<Customers> getCustomersCollection() {
-//        return customersCollection;
-//    }
-//
-//    public void setCustomersCollection(Collection<Customers> customersCollection) {
-//        this.customersCollection = customersCollection;
-//    }
     @Override
     public String toString() {
         return "\n{\"sn\": \"" + sn + "\",\"model\": \"" + model + "\",\"color\": \"" + color + "\",\"engineNumber\": \"" + engineNumber + "\",\"chasisNumber\": \"" + chasisNumber + "\",\"regNo\": \"" + regNo + "\",\"costPrice\": \"" + costPrice + "\",\"sellingPrice\": \"" + sellingPrice + "\",\"quantity\": \"" + quantity + "\",\"entryDate\": \"" + entryDate + "\",\"status\": \"" + status + "\",\"createdDate\": \"" + createdDate + "\",\"updatedDate\": \"" + updatedDate + "\"}";

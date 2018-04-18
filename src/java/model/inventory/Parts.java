@@ -24,7 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import model.customer.Customers;
+import model.consumer.Customers;
 import model.sales.PartsSales;
 
 /**

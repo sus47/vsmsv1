@@ -76,8 +76,8 @@ public class BikesSalesRestController {
             map = mapper.readValue(jcsonArray[0], new TypeReference<Map<String, String>>() {
             });
 
-            dao.customer.DaoCustomers dac = new dao.customer.DaoImpCustomers();
-            model.customer.Customers cus = new model.customer.Customers();
+            dao.consumer.DaoCustomers dac = new dao.consumer.DaoImpCustomers();
+            model.consumer.Customers cus = new model.consumer.Customers();
             customerId = (map.get("customerId").toString());
             customerName = (map.get("customerName").toString());
             address = (map.get("address").toString());
