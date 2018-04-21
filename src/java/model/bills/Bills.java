@@ -278,7 +278,14 @@ public class Bills implements Serializable {
 
     @Override
     public String toString() {
+<<<<<<< HEAD
         return "model.bills.Bills[ sn=" + sn + " ]";
     }
     
+=======
+        return "Bills{" + "sn=" + sn + ", cusId=" + cusId + ", cusName=" + cusName + ", address=" + address + ", phone=" + phone + ", orgType=" + orgType + ", cusType=" + cusType + ", serviceBill=" + serviceBill + ", panNo=" + panNo + ", serviceTimes=" + serviceTimes + ", serviceType=" + serviceType + ", invoice=" + invoice + ", bikeId=" + bikeId + ", quantity=" + quantity + ", discount=" + discount + ", totalSp=" + totalSp + ", vat=" + vat + ", total=" + total + ", netTotal=" + netTotal + ", advance=" + advance + ", due=" + due + ", createdDate=" + createdDate + '}';
+    }
+
+   
+>>>>>>> 2267b2a89aced38ede71136c8a98dc31fa56455f
 }

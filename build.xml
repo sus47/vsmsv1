@@ -7,8 +7,13 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
+<<<<<<< HEAD
 <project name="VSMSV1" default="default" basedir=".">
     <description>Builds, tests, and runs the project VSMSV1.</description>
+=======
+<project name="VSMSV2" default="default" basedir=".">
+    <description>Builds, tests, and runs the project VSMSV2.</description>
+>>>>>>> 2267b2a89aced38ede71136c8a98dc31fa56455f
     <import file="nbproject/build-impl.xml"/>
     <!--
 
