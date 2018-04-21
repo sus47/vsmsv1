@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="RPSPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>model.students.StudentsGuardianInformation</class>
+    <class>model.students.StudentsGeneralInfo</class>
+    <class>model.exam.ExamResultDetails</class>
+    <class>model.exam.ExamResult</class>
+    <class>model.exam.ExamDetails_1</class>
+    <class>model.exam.Students</class>
+    <class>model.exam.ExamStudentReg</class>
+    <class>model.exam.ExamSubjectGroup_1</class>
+    <class>model.exam.AcademicYear</class>
+    <class>model.exam.SchoolInfo</class>
+    <class>model.exam.SchoolInfo_1</class>
+    <class>model.exam.AcademicYear_1</class>
+    <class>model.exam.Students_1</class>
+    <class>model.exam.ExamSubject</class>
+    <class>model.students.StudentPhotoDetails</class>
+    <class>model.inventory.Ledger</class>
+    <class>model.inventory.Parts</class>
+    <class>model.inventory.Bikes</class>
+    <class>model.inventory.BikePriceUpdates</class>
+    <class>model.inventory.PartsPriceUpdates</class>
+    <class>rest.controller.customer.Customers</class>
+    <class>model.sales.BikesSales</class>
+    <class>model.sales.PartsSales</class>
+    <class>model.bills.Bills</class>
+    <class>model.consumer.Staffs</class>
+    <class>model.consumer.Customers</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/rps"/>
+      <property name="javax.persistence.jdbc.user" value="system"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="manager"/>
+    </properties>
+  </persistence-unit>
+</persistence>
