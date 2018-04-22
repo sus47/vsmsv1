@@ -1,6 +1,8 @@
 
 package controller.consumer;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,11 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CustomersController {
+    
+GsonBuilder gsonBuilder = new GsonBuilder();
+Gson gson = gsonBuilder.create();
 @RequestMapping(value="consumer/Customers",method = RequestMethod.GET)
 public String doGet(ModelMap map)
 {
  dao.consumer.DaoCustomers da=new dao.consumer.DaoImpCustomers(); 
-map.put("Record",da.getAll("from Customers"));
+ 
+map.put("Record",gson.toJson(da.getAll("from Customers")));
 return "consumer/Customers";  
 }
 @RequestMapping(value="consumer/Customers",method = RequestMethod.POST)

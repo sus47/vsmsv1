@@ -4,6 +4,8 @@ return "\n{\"sn\": \""+sn+"\",\"staffId\": \""+staffId+"\",\"name\": \""+name+"\
 
 package rest.controller.consumer;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import cvt.Convert;
 import java.io.IOException;
 import java.util.Date;
@@ -28,13 +30,14 @@ public class StaffsRestController {
 ObjectMapper mapper = new ObjectMapper();  
 dao.consumer.DaoStaffs da=new dao.consumer.DaoImpStaffs(); 
 ApiBaseController json=new ApiBaseController();
-String msg="";
-
+String msg="", sql="";
+GsonBuilder gsonBuilder = new GsonBuilder();
+Gson gson = gsonBuilder.create();
 @RequestMapping(value = "api/consumer/staff", method = RequestMethod.GET, produces = "application/json")
 @ResponseBody
 public String index()
 {
-return json.respondWithMessage("Success",da.getAll("from Staffs"));
+return json.respondWithMessage("Success",gson.toJson(da.getAll("from Staffs")));
 }
     
 @RequestMapping(value = "api/consumer/staff", method = RequestMethod.POST, produces = "application/json")

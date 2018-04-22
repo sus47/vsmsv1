@@ -1,6 +1,11 @@
 
 <%@page import="java.util.Date"%>
 <%@include file="../login/header.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!doctype html>
 <html lang="en">
     <head>
@@ -12,12 +17,12 @@
             body, h1, h2, h3, h4, h5, h6{
                 font-family: 'Bree Serif', serif;
             }
-
         </style>
     </head>
 
     <body>
         <div class="container">
+            <c:forEach items="${billData}" var="bill">
             <div class="row">
                 <div class="col-xs-12">
 
@@ -34,8 +39,8 @@
                     </div>
                     <div class="col-xs-3 text-center">
                         <p>
-                            Invoice: #${bill.invoice}<br/>
-                            CustomerID: #${bill.customerId}<br/>
+                            Invoice: ${bill.invoice}<br/>
+                            CustomerID: ${bill.cusId}<br/>
                             Date: <%
                                 Date date = new Date();
                                 out.print(date);%></p>
@@ -52,33 +57,19 @@
                 <div class="col-xs-5">
                     <div class="panel panel-default">
                         <div class="panel-heading" style="padding: 0;">
-                            <p style="font-size:16px;">Customer Name: ${bill.name}</h4>
+                            <p style="font-size:16px;">Customer Name: ${bill.cusName}</h4>
                         </div>
                         <div class="panel-body" style="padding:0;">
                             <p>
                                 ${bill.address} <br>
                                 Phone: ${bill.phone} <br>
-                                <span class="pan">PAN No/VAT No: ${bill.panNumber} </span><br>
+                                <span class="pan">PAN No/VAT No: ${bill.panNo} </span><br>
                             </p>
                         </div>
                     </div>
                 </div>
-                <!--        <div class="col-xs-5 col-xs-offset-2 text-right">
-                          <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h4>To : <a href="#">Client Name</a></h4>
-                            </div>
-                            <div class="panel-body">
-                              <p>
-                                Address <br>
-                                details <br>
-                                more <br>
-                              </p>
-                            </div>
-                          </div>
-                        </div>-->
+            
             </div>
-            <!-- / end client details section -->
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -106,21 +97,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:foreach items="${bill}" var ="bill" varStatus ="counter">
                     <tr>
                         <td>${counter.count}</td>
-                        <td>${bill.partNumber}</td>
-                        <td><a href="#">${bill.partName}</a></td>
+<!--                        <td><a href="#">
+                               <% //${bill.partName}%>
+                            </a></td>-->
                         <td class="text-right">${bill.quantity}</td>
-                        <td class="text-right">${bill.price}</td>
+<!--                        <td class="text-right">
+                            <%//${bill.price}%>
+                        </td>-->
                         <td class="text-right">${bill.discount}</td>
-                        <td class="text-right">${bill.totalSellingPrice}</td>
+                        <td class="text-right">${bill.totalSp}</td>
                     </tr>
-
                 </tbody>
             </table>
             <div class="row text-right" >
-
                 <div class="col-xs-8 text-left " style="left: 15px;border: 1px solid black; height: 100px;">
                     <p>    <strong>Amount in words: </strong><br>
                     </p>
@@ -151,33 +142,10 @@
                         <div class="panel-heading" style="padding:0px;">
                             <p>Notice*:&nbsp; Goods once sold will not be taken back.</p>
                         </div>
-                        <!--            <div class="panel-body">
-                                      <p>Your Name</p>
-                                      <p>Bank Name</p>
-                                      <p>SWIFT : --------</p>
-                                      <p>Account Number : --------</p>
-                                      <p>IBAN : --------</p>
-                                    </div>-->
-                   
                 </div>
-                <!--        <div class="col-xs-7">
-                          <div class="span7">
-                            <div class="panel panel-info">
-                              <div class="panel-heading">
-                                <h4>Contact Details</h4>
-                              </div>
-                              <div class="panel-body">
-                                <p>
-                                  Email : you@example.com <br><br>
-                                  Mobile : -------- <br> <br>
-                                  Twitter : <a href="https://twitter.com/tahirtaous">@TahirTaous</a>
-                                </p>
-                                <h4>Payment should be made by Bank Transfer</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>-->
             </div>
+                    </c:forEach>
         </div>
+                    
     </body>
 </html>

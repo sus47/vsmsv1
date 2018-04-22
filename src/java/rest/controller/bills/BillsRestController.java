@@ -4,9 +4,13 @@ return "\n{\"sn\": \""+sn+"\",\"cusId\": \""+cusId+"\",\"cusName\": \""+cusName+
 
 package rest.controller.bills;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import model.DB;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.ui.Model;
@@ -26,14 +30,16 @@ public class BillsRestController {
 ObjectMapper mapper = new ObjectMapper();  
 dao.bills.DaoBills da=new dao.bills.DaoImpBills(); 
 ApiBaseController json=new ApiBaseController();
-String msg="";
-
+String msg="",sql="";
+GsonBuilder gsonBuilder = new GsonBuilder();
+Gson gson = gsonBuilder.create();
 @RequestMapping(value = "api/bills/bills", method = RequestMethod.GET, produces = "application/json")
 @ResponseBody
 public String index()
 {
-return json.respondWithMessage("Success",da.getAll("from Bills"));
+return json.respondWithMessage("Success",gson.toJson(da.getAll("from Bills")));
 }
+
     
 @RequestMapping(value = "api/bills/bills", method = RequestMethod.POST, produces = "application/json")
 @ResponseBody

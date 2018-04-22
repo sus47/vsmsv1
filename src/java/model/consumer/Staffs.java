@@ -186,7 +186,8 @@ public class Staffs implements Serializable {
 
     @Override
     public String toString() {
-        return "model.consumer.Staffs[ sn=" + sn + " ]";
+        return "Staffs{" + "sn=" + sn + ", staffId=" + staffId + ", name=" + name + ", address=" + address + ", phone=" + phone + ", joinedDate=" + joinedDate + ", salary=" + salary + ", attendance=" + attendance + ", credit=" + credit + ", createdDate=" + createdDate + ", post=" + post + ", type=" + type + '}';
     }
 
+  
 }

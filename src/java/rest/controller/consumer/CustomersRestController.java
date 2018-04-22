@@ -3,6 +3,8 @@ return "\n{\"id\": \""+id+"\",\"cusId\": \""+cusId+"\",\"name\": \""+name+"\",\"
  */
 package rest.controller.consumer;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import cvt.Convert;
 import java.io.IOException;
 import java.util.Date;
@@ -30,10 +32,13 @@ public class CustomersRestController {
     ApiBaseController json = new ApiBaseController();
     String msg = "";
 
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson gson = gsonBuilder.create();
+
     @RequestMapping(value = "api/consumer/customer", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String index() {
-        return json.respondWithMessage("Success", da.getAll("from Customers"));
+        return json.respondWithMessage("Success", gson.toJson(da.getAll("from Customers")));
     }
 
     @RequestMapping(value = "api/consumer/customer", method = RequestMethod.POST, produces = "application/json")
@@ -45,21 +50,21 @@ public class CustomersRestController {
 
         model.consumer.Customers obj = new model.consumer.Customers();
         /*obj.setId(map.get("id").toString());*/
-        String cusType ="";
+        String cusType = "";
         cusType = map.get("customerType").toString();
         int pan = 0;
-               if(cusType=="P"){
-                try{
-               obj.setPan(pan);
-                }catch(Exception ex){
+        if (cusType == "P") {
+            try {
+                obj.setPan(pan);
+            } catch (Exception ex) {
                 System.out.println(ex);
-                }
-        }else{
-                   try{
-            obj.setPan(Convert.toInt(map.get("panNumber").toString()));
-                   }catch(Exception ex){
-                   
-                   }
+            }
+        } else {
+            try {
+                obj.setPan(Convert.toInt(map.get("panNumber").toString()));
+            } catch (Exception ex) {
+
+            }
         }
         obj.setCustomerType(cusType);
         obj.setCustomerId(map.get("customerId").toString());

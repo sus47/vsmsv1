@@ -278,7 +278,7 @@ public class Bills implements Serializable {
 
     @Override
     public String toString() {
-        return "Bills{" + "sn=" + sn + ", cusId=" + cusId + ", cusName=" + cusName + ", address=" + address + ", phone=" + phone + ", orgType=" + orgType + ", cusType=" + cusType + ", serviceBill=" + serviceBill + ", panNo=" + panNo + ", serviceTimes=" + serviceTimes + ", serviceType=" + serviceType + ", invoice=" + invoice + ", bikeId=" + bikeId + ", quantity=" + quantity + ", discount=" + discount + ", totalSp=" + totalSp + ", vat=" + vat + ", total=" + total + ", netTotal=" + netTotal + ", advance=" + advance + ", due=" + due + ", createdDate=" + createdDate + '}';
+        return "{" + "sn=" + sn + ", cusId=" + cusId + ", cusName=" + cusName + ", address=" + address + ", phone=" + phone + ", orgType=" + orgType + ", cusType=" + cusType + ", serviceBill=" + serviceBill + ", panNo=" + panNo + ", serviceTimes=" + serviceTimes + ", serviceType=" + serviceType + ", invoice=" + invoice + ", bikeId=" + bikeId + ", quantity=" + quantity + ", discount=" + discount + ", totalSp=" + totalSp + ", vat=" + vat + ", total=" + total + ", netTotal=" + netTotal + ", advance=" + advance + ", due=" + due + ", createdDate=" + createdDate + '}';
     }
 
    
