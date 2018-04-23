@@ -184,19 +184,19 @@ public class Bills implements Serializable {
         this.invoice = invoice;
     }
 
-    public Integer getBikeId() {
+    public int getBikeId() {
         return bikeId;
     }
 
-    public void setBikeId(Integer bikeId) {
+    public void setBikeId(int bikeId) {
         this.bikeId = bikeId;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -222,6 +222,14 @@ public class Bills implements Serializable {
 
     public void setVat(Float vat) {
         this.vat = vat;
+    }
+
+    public Float getTotal() {
+        return total;
+    }
+
+    public void setTotal(Float total) {
+        this.total = total;
     }
 
     public Float getNetTotal() {
@@ -257,6 +265,12 @@ public class Bills implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return "{" + "sn=" + sn + ", cusId=" + cusId + ", cusName=" + cusName + ", address=" + address + ", phone=" + phone + ", orgType=" + orgType + ", cusType=" + cusType + ", serviceBill=" + serviceBill + ", panNo=" + panNo + ", serviceTimes=" + serviceTimes + ", serviceType=" + serviceType + ", invoice=" + invoice + ", bikeId=" + bikeId + ", quantity=" + quantity + ", discount=" + discount + ", totalSp=" + totalSp + ", vat=" + vat + ", total=" + total + ", netTotal=" + netTotal + ", advance=" + advance + ", due=" + due + ", createdDate=" + createdDate + '}';
+    }
+
+  
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (sn != null ? sn.hashCode() : 0);
@@ -276,8 +290,5 @@ public class Bills implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "{" + "sn=" + sn + ", cusId=" + cusId + ", cusName=" + cusName + ", address=" + address + ", phone=" + phone + ", orgType=" + orgType + ", cusType=" + cusType + ", serviceBill=" + serviceBill + ", panNo=" + panNo + ", serviceTimes=" + serviceTimes + ", serviceType=" + serviceType + ", invoice=" + invoice + ", bikeId=" + bikeId + ", quantity=" + quantity + ", discount=" + discount + ", totalSp=" + totalSp + ", vat=" + vat + ", total=" + total + ", netTotal=" + netTotal + ", advance=" + advance + ", due=" + due + ", createdDate=" + createdDate + '}';
-    }
+   
 }
