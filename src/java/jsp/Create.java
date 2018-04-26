@@ -21,8 +21,8 @@ password="manager";
 String tabName,fileName,packageName;
 
 
-tabName="staffs";
-fileName="Staffs";
+tabName="attendance";
+fileName="Attendance";
 packageName="consumer";
 
 

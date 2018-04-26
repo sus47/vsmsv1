@@ -39,7 +39,16 @@ public String index()
 {
 return json.respondWithMessage("Success",gson.toJson(da.getAll("from Staffs")));
 }
+  
+@RequestMapping(value="api/staff/attendance", method = RequestMethod.POST, produces="application/json")
+@ResponseBody
+public String attendance(@RequestBody String jcson) throws IOException
+{
+    map = mapper.readValue(jcson, new TypeReference<Map<String, String>>(){});
     
+    return json.respondWithMessage("Success");
+}
+
 @RequestMapping(value = "api/consumer/staff", method = RequestMethod.POST, produces = "application/json")
 @ResponseBody
 public String doSave(@RequestBody String jcson) throws IOException

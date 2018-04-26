@@ -188,6 +188,4 @@ public class Staffs implements Serializable {
     public String toString() {
         return "Staffs{" + "sn=" + sn + ", staffId=" + staffId + ", name=" + name + ", address=" + address + ", phone=" + phone + ", joinedDate=" + joinedDate + ", salary=" + salary + ", attendance=" + attendance + ", credit=" + credit + ", createdDate=" + createdDate + ", post=" + post + ", type=" + type + '}';
     }
-
-  
 }

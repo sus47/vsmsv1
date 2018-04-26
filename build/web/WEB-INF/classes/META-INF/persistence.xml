@@ -28,6 +28,7 @@
     <class>model.bills.Bills</class>
     <class>model.consumer.Staffs</class>
     <class>model.consumer.Customers</class>
+    <class>model.consumer.Attendance</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/rps"/>
