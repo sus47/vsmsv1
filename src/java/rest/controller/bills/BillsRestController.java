@@ -34,7 +34,7 @@ public class BillsRestController {
     String msg = "", sql = "";
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
-
+    DB db = new DB();
     @RequestMapping(value = "api/bills/bills", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String index() {
@@ -68,7 +68,7 @@ public class BillsRestController {
                 + "BI.`TOTAL_SP` as totalSp "
                 + "from bills BI, bikes B where B.`SN` = BI.`BIKE_ID` AND BI.`INVOICE`='" + invoice + "'";
         System.out.println(sql);
-        List billData = new DB().getRecord(sql);
+        List billData = db.getRecord(sql);
         map.addAttribute("data", billData);
         System.out.println(bill);
         map.addAttribute("billData", bill);
@@ -79,9 +79,10 @@ public class BillsRestController {
     @ResponseBody
     public String order() {
         try{
-        sql = "SELECT * FROM parts WHERE QUANTITY<=THRESHOLD";
-        List list = new DB().getRecord(sql);
-        return json.respondWithMessage("Success", gson.toJson(list));
+        String order = "SELECT * FROM parts WHERE QUANTITY<=THRESHOLD";
+            System.out.println(order);
+        List orders = db.getRecord(order);
+        return json.respondWithMessage("Success", gson.toJson(orders));
         }catch(Exception e){
         msg = e.getMessage();
         return json.respondWithError(msg);
@@ -91,9 +92,10 @@ public class BillsRestController {
     @ResponseBody
     public String service() {
         try{
-        sql = "SELECT * FROM servicing_info WHERE (-DATEDIFF(SYSDATE(),SERVICING_DATE))<=7";
-        List list = new DB().getRecord(sql);
-        return json.respondWithMessage("Success", gson.toJson(list));
+        String service = "SELECT C.`NAME` customerName, C.PHONE phone, B.MODEL bikeModel,S.`SERVICING_DATE` servicingDate,(-DATEDIFF(SYSDATE(),S.SERVICING_DATE)) AS remainingDays FROM servicing_info S,customers C, bikes B WHERE S.`CUSTOMER_ID`=C.`CUS_ID` AND C.`BIKES_ID`= B.`SN` AND (-DATEDIFF(SYSDATE(),SERVICING_DATE))<=7";
+            System.out.println(service);
+        List services = db.getRecord(service);
+        return json.respondWithMessage("Success", gson.toJson(services));
         }catch(Exception e){
         msg = e.getMessage();
         return json.respondWithError(msg);
