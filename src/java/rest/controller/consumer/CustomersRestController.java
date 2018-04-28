@@ -51,7 +51,7 @@ public class CustomersRestController {
         com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
         List list = objectMapper.readValue(jsonDataArray[1], new com.fasterxml.jackson.core.type.TypeReference<List>() {
         });
-
+        System.out.println(list);
         model.consumer.Customers obj = new model.consumer.Customers();
         System.out.println(list.size());
         for (int i = 0; i < list.size(); i++) {
