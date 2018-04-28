@@ -87,6 +87,18 @@ public class BillsRestController {
         return json.respondWithError(msg);
         }
     }
+     @RequestMapping(value = "api/notification/service", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public String service() {
+        try{
+        sql = "SELECT * FROM servicing_info WHERE (-DATEDIFF(SYSDATE(),SERVICING_DATE))<=7";
+        List list = new DB().getRecord(sql);
+        return json.respondWithMessage("Success", gson.toJson(list));
+        }catch(Exception e){
+        msg = e.getMessage();
+        return json.respondWithError(msg);
+        }
+    }
 @RequestMapping(value = "api/bills/bills", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public String doSave(@RequestBody String jcson) throws IOException {
