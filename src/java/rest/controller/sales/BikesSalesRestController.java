@@ -41,10 +41,11 @@ public class BikesSalesRestController {
     }
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
+
     @RequestMapping(value = "api/sales/latestBikeInvoice", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String invoice() {
-        String invoice = "SELECT IFNULL(BIKE_INV,'INVB1') as bikeInvoice FROM invoice WHERE substr(BIKE_INV,5,10)= (SELECT MAX(SUBSTR(BIKE_INV,5,10)) FROM invoice)";
+String invoice ="SELECT IFNULL((select concat(substr(INV,1,3),substr(INV,4,10)+1) FROM invoice WHERE substr(INV,4,10)= (SELECT MAX(CAST(SUBSTR(INV,4,10) AS int)) FROM invoice)),'INV1') AS bikeInvoice FROM invoice";
         List list = new DB().getRecord(invoice);
         return json.respondWithMessage("Success", gson.toJson(list));
     }
@@ -52,20 +53,24 @@ public class BikesSalesRestController {
     @RequestMapping(value = "api/sales/latestCustomerInvoice", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String customer() {
-        String customer = "SELECT IFNULL(CUS_ID,'CUSB1') as customerId FROM invoice WHERE substr(CUS_ID,5,10)= (SELECT MAX(SUBSTR(CUS_ID,5,10)) FROM invoice)";
-        List list = new DB().getRecord(customer);
+        
+String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)+1) FROM invoice WHERE substr(CUS_ID,4,10)= (SELECT MAX(CAST(SUBSTR(CUS_ID,4,10) AS int)) FROM invoice)),'CUS1') AS customerId FROM invoice";
+        List list = new DB().getRecord(sql);
         return json.respondWithMessage("Success", gson.toJson(list));
     }
+
     @RequestMapping(value = "api/sales/bikessales", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public String doSave(@RequestBody String jcson) throws IOException {
 
 //        map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
 //        });
-        System.out.println("inside bikesales:"+jcson);
-        String bikeId = "", address = "", customerId = "", customerName = "", phone = "", pan = "", invoice = "",advance="";
-        String model = "", sellingPrice = "", quantity = "", price = "", discount = "",cusType="", dueAmount="",netTotal="", orgType="";
-        String total="", vat="";
+        System.out.println("inside bikesales:" + jcson);
+        String bikeId = "", address = "", customerId = "", customerName = "", phone = "", invoice = "";
+        double advance = 0.0, dueAmount = 0.0 , discount = 0.0, vat = 0.0;
+        int pan = 0;
+        String model = "", sellingPrice = "", quantity = "", price = "",  netTotal = "", orgType = "";
+        String total = "";
 
         String sql = "", sqlBikeSale = "", sqlBill = "", bikeUpdate = "", sqlLedger = "";
         try {
@@ -78,39 +83,76 @@ public class BikesSalesRestController {
 
             dao.consumer.DaoCustomers dac = new dao.consumer.DaoImpCustomers();
             model.consumer.Customers cus = new model.consumer.Customers();
-            customerId = (map.get("customerId").toString());
-            customerName = (map.get("customerName").toString());
-            address = (map.get("address").toString());
-            phone = (map.get("phone").toString());
-            pan = (map.get("panNumber").toString());
-            
-            invoice = (map.get("invoiceNumber").toString());
-            cusType = (map.get("cusType").toString());
-            dueAmount = map.get("dueAmount").toString();
-            netTotal= map.get("netTotal").toString();
-            advance = map.get("advance").toString();
-            orgType = map.get("orgType").toString();
-            total = map.get("total").toString();
-            vat = map.get("vat").toString();
-            String inv = "INSERT INTO `invoice`(`BIKE_INV`,`CUS_ID`,`CREATED_DATE`) VALUES ('"+invoice+"','"+customerId+"',now())";
+            try {
+                customerId = (map.get("customerId").toString());
+            } catch (Exception e) {
+            }
+            try {
+                customerName = (map.get("customerName").toString());
+            } catch (Exception e) {
+            }
+            try {
+                address = (map.get("address").toString());
+            } catch (Exception e) {
+            }
+            try {
+                phone = (map.get("phone").toString());
+            } catch (Exception e) {
+            }
+            try {
+                pan = Convert.toInt(map.get("panNumber").toString());
+                System.out.println(pan);
+            } catch (Exception e) {
+            }
+
+            try {
+                invoice = (map.get("invoiceNumber").toString());
+            } catch (Exception e) {
+            }
+           
+            try {
+                dueAmount = Convert.toDouble(map.get("dueAmount").toString());
+            } catch (Exception e) {
+            }
+            try {
+                netTotal = map.get("netTotal").toString();
+            } catch (Exception e) {
+            }
+            try {
+                advance = Convert.toDouble(map.get("advance").toString());
+            } catch (Exception e) {
+            }
+            try {
+                orgType = map.get("orgType").toString();
+            } catch (Exception e) {
+            }
+            try {
+                total = map.get("total").toString();
+            } catch (Exception e) {
+            }
+            try {
+                vat = Convert.toDouble(map.get("vat").toString());
+            } catch (Exception e) {
+            }
+            String inv = "INSERT INTO `invoice`(`INV`,`CUS_ID`,`CREATED_DATE`) VALUES ('" + invoice + "','" + customerId + "',now())";
             msg = General.update(inv);
             System.out.println(msg);
-            
-            String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES ('"+customerId+"','Bike Purchase',"+advance+","+dueAmount+", now())";
+
+            String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES ('" + customerId + "','Bike Purchase'," + advance + "," + dueAmount + ", now())";
             msg = General.update(led);
             System.out.println(msg);
             com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
             List list = objectMapper.readValue(jcsonArray[1], new com.fasterxml.jackson.core.type.TypeReference<List>() {
             });
-            
-            System.out.println("list:"+ list);
- System.out.println("size of list is:"+list.size());
-            
+
+            System.out.println("list:" + list);
+            System.out.println("size of list is:" + list.size());
+
             for (int i = 0; i < list.size(); i++) {
                 sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`, `INVOICE`,`CREATED_DATE`) VALUES";
                 sqlBikeSale = "INSERT INTO bikes_sales(`BIKE_ID`, `CUSTOMER_ID`, `DISCOUNT`, `INVOICE`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `CREATED_DATE`) VALUES";
                 bikeUpdate = "UPDATE bikes SET ";
-                sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`, `BIKE_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `CUS_TYPE`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
+                sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`, `BIKE_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
                 Object object = list.get(i);
                 System.out.println(object);
                 try {
@@ -142,27 +184,27 @@ public class BikesSalesRestController {
                     } catch (Exception e) {
                     }
                     try {
-                        discount = row.get("discount").toString();
+                        discount = Convert.toDouble(row.get("discount").toString());
                         System.out.println(discount);
                     } catch (Exception e) {
                     }
-                    sql+= " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + "," + bikeId + ",'" + invoice + "', now())";
+                    sql += " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + "," + bikeId + ",'" + invoice + "', now())";
 
-                    sqlBikeSale+="("+bikeId+",'"+customerId+"',"+discount+",'"+invoice+"',"+price+","+quantity+",'admin',now(),now())";
-                     bikeUpdate+="QUANTITY=QUANTITY-"+quantity+", UPDATED_DATE=now() WHERE SN="+bikeId+"";
-                    sqlBill+="('"+address+"',"+advance+","+bikeId+",now(),'"+customerId+"','"+customerName+"','"+cusType+"',"+discount+","+dueAmount+",'"+invoice+"',"+netTotal+",'"+orgType+"',"+pan+",'"+phone+"',"+quantity+","+sellingPrice+","+vat+","+total+")";
+                    sqlBikeSale += "(" + bikeId + ",'" + customerId + "'," + discount + ",'" + invoice + "'," + price + "," + quantity + ",'admin',now(),now())";
+                    bikeUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + bikeId + "";
+                    sqlBill += "('" + address + "'," + advance + "," + bikeId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
                     msg = General.update(sql);
-                     System.out.println(msg);
-                  
-                     msg = General.update(sqlBikeSale);
-                     System.out.println(msg);
-                     msg = General.update(bikeUpdate);
-                     System.out.println(msg);
-                     msg = General.update(sqlBill);
-                     System.out.println(msg);
-                     
-                     String servicing = "INSERT INTO `servicing_info`(`CUSTOMER_ID`, `SERVICING_DATE`, `REMARKS`, `CREATED_DATE`) VALUES ('"+customerId+"',DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 20 DAY),'Bike Purchased',now())";
-                     msg = General.update(servicing);
+                    System.out.println(msg);
+
+                    msg = General.update(sqlBikeSale);
+                    System.out.println(msg);
+                    msg = General.update(bikeUpdate);
+                    System.out.println(msg);
+                    msg = General.update(sqlBill);
+                    System.out.println(msg);
+
+                    String servicing = "INSERT INTO `servicing_info`(`CUSTOMER_ID`, `SERVICING_DATE`, `REMARKS`, `CREATED_DATE`) VALUES ('" + customerId + "',DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 20 DAY),'Bike Purchased',now())";
+                    msg = General.update(servicing);
                 } catch (Exception e) {
                     msg = e.getMessage();
                     return json.respondWithError(msg);

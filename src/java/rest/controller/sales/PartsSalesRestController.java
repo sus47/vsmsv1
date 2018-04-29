@@ -43,14 +43,6 @@ public class PartsSalesRestController {
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
 
-    @RequestMapping(value = "api/sales/latestCustomerId", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public String customer() {
-        String customer = "SELECT CUS_ID as customerId FROM invoice WHERE substr(CUS_ID,5,10)= (SELECT MAX(SUBSTR(CUS_ID,5,10)) FROM invoice)";
-        List list = new DB().getRecord(customer);
-        return json.respondWithMessage("Success", gson.toJson(list));
-    }
-
     @RequestMapping(value = "api/sales/latestPartInvoice", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String partInvoice() {
@@ -72,11 +64,11 @@ public class PartsSalesRestController {
     public String doSave(@RequestBody String jcson) throws IOException {
 
         System.out.println("data:" + jcson);
-        String bikeId = "", partsId = "", address = "", customerId = "", customerName = "", phone = "",  invoice = "";
+        String address = "", customerId = "", customerName = "", phone = "", invoice = "";
         String model = "", sellingPrice = "", quantity = "", price = "", cusType = "", netTotal = "", orgType = "";
         String total = "", serviceType = "", serviceTimes = "", isService = "";
-        int pan=0, vat=0; 
-        float advance = 0,discount = 0,dueAmount =0;
+        int bikeId = 0, partsId = 0, pan = 0;
+        float advance = 0, discount = 0, dueAmount = 0, vat = 0;
         String sql = "", sqlPartSale = "", sqlBill = "", partUpdate = "", sqlLedger = "", inv = "", remarks = "";
         try {
             System.out.println("inside try");
@@ -149,7 +141,10 @@ public class PartsSalesRestController {
                 serviceTimes = map.get("serviceTimes").toString();
             } catch (Exception e) {
             }
-            if (serviceType.equals("F") ){
+            inv = "INSERT INTO `invoice`(`INV`,`CUS_ID`,`CREATED_DATE`) VALUES ('" + invoice + "','" + customerId + "',now())";
+            msg = General.update(inv);
+            System.out.println(msg);
+            if (serviceType.equals("F")) {
                 switch (serviceTimes) {
                     case "1":
                         remarks = "First Free Servicing";
@@ -191,23 +186,17 @@ public class PartsSalesRestController {
                         remarks = "Thirteenth Free Servicing";
                         break;
                     default:
-                        remarks="Invalid Entry";
+                        remarks = "Invalid Entry";
                         break;
                 }
             }
-            
+
 //            if(isService=="N"){
-            if (serviceType == "N") {
-                System.out.println("inside servicetype no");
-                inv = "INSERT INTO `invoice`(`SERVICE_INV`,`CUS_ID`,`CREATED_DATE`) VALUES ('" + invoice + "','" + customerId + "',now())";
-            } else {
-                inv = "INSERT INTO `invoice`(`SERVICE_INV`,`CUS_ID`,`CREATED_DATE`) VALUES ('" + invoice + "','" + customerId + "',now())";
+            if (serviceType == "y") {
                 sql = "INSERT INTO servicing_info(`CUSTOMER_ID`, `SERVICED_DATE`, `SERVICING_DATE`, `REMARKS`, SERVICING_TYPE, SERVICING_COUNT,CREATED_DATE) VALUES('" + customerId + "',now(),DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 3 MONTH),'" + remarks + "','" + serviceType + "','" + serviceTimes + "',now())";
                 msg = General.update(sql);
                 System.out.println(msg);
             }
-            msg = General.update(inv);
-            System.out.println(msg);
 
             com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
             List list = objectMapper.readValue(jcsonArray[1], new com.fasterxml.jackson.core.type.TypeReference<List>() {
@@ -216,92 +205,103 @@ public class PartsSalesRestController {
             System.out.println(list);
             System.out.println("size of list is:" + list.size());
 
-            for (int i = 0; i < list.size(); i++) {
-                sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`,`PARTS_ID`, `INVOICE`,`CREATED_DATE`) VALUES";
-                sqlPartSale = "INSERT INTO parts_sales(`CUSTOMER_ID`, `BIKE_ID`, `PARTS_ID`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `DISCOUNT`, `INVOICE`, `CREATED_DATE`) VALUES ";
-                partUpdate = "UPDATE parts SET ";
-                Object object = list.get(i);
-                System.out.println(object);
-                try {
-                    Map row = (Map) object;
-
-                    try {
-                        partsId = row.get("sn").toString();
-                        System.out.println(partsId);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        sellingPrice = row.get("sellingPrice").toString();
-                        System.out.println(sellingPrice);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        quantity = row.get("quantity").toString();
-                        System.out.println(quantity);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        price = row.get("price").toString();
-                        System.out.println(price);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        model = row.get("model").toString();
-                        System.out.println(model);
-                    } catch (Exception e) {
-                        System.out.println("model is :" + e.getMessage());
-                    }
-                    try {
-                        discount = Convert.toFloat(row.get("discount").toString());
-                        System.out.println(discount);
-                    } catch (Exception e) {
-                    }
-
-                   
-
-                    sql += " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",'" + invoice + "', now())";
-
-                    sqlPartSale += "('" + customerId + "',(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + "," + price + "," + quantity + ",'admin',now()," + discount + ",'" + invoice + "',now())";
-                    partUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + partsId + "";
-
-                    if (serviceType == "N") {
-                        sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
-                        sqlBill += "('" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
-                    } else {
-                        sqlBill = "INSERT INTO bills(`SERVICE_BILL`,`SERVICE_TIMES`,`SERVICE_TYPE`,`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`,`DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
-                        sqlBill += "('" + serviceType + "','" + serviceTimes + "','" + serviceType + "','" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
-                    }
+//            String cust = "SELECT CUS_ID cusId FROM customers";
+//            List custo = new DB().getRecord(cust);
+//            System.out.println(custo);
+//            for (int j = 0; j < custo.size(); j++) {
+//                Map maps = (Map) custo.get(j);
+//                String cusId = maps.get("cusId").toString();
+//                if (!cusId.equalsIgnoreCase(customerId)) {
+                    sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`,`PARTS_ID`, `INVOICE`,`CREATED_DATE`) VALUES"
+                            + " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",'" + invoice + "', now())";
                     msg = General.update(sql);
                     System.out.println(msg);
-                    msg = General.update(sqlPartSale);
-                    System.out.println(msg);
-                    msg = General.update(partUpdate);
-                    System.out.println(msg);
-                    msg = General.update(sqlBill);
-                    System.out.println(msg);
-                } catch (Exception e) {
-                    msg = e.getMessage();
-                    return json.respondWithError(msg);
-                }
-            }
+//                }
+//            }
+                    for (int i = 0; i < list.size(); i++) {
+                        sqlPartSale = "INSERT INTO parts_sales(`CUSTOMER_ID`, `BIKE_ID`, `PARTS_ID`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `DISCOUNT`, `INVOICE`, `CREATED_DATE`) VALUES ";
+                        partUpdate = "UPDATE parts SET ";
+                        Object object = list.get(i);
+                        System.out.println(object);
+                        try {
+                            Map row = (Map) object;
 
-        } catch (Exception e) {
+                            try {
+                                partsId = Convert.toInt(row.get("sn").toString());
+                                System.out.println(partsId);
+                            } catch (Exception e) {
+                            }
+                            try {
+                                sellingPrice = row.get("sellingPrice").toString();
+                                System.out.println(sellingPrice);
+                            } catch (Exception e) {
+                            }
+                            try {
+                                quantity = row.get("quantity").toString();
+                                System.out.println(quantity);
+                            } catch (Exception e) {
+                            }
+                            try {
+                                price = row.get("price").toString();
+                                System.out.println(price);
+                            } catch (Exception e) {
+                            }
+                            try {
+                                model = row.get("model").toString();
+                                System.out.println(model);
+                            } catch (Exception e) {
+                                System.out.println("model is :" + e.getMessage());
+                            }
+                            try {
+                                discount = Convert.toFloat(row.get("discount").toString());
+                                System.out.println(discount);
+                            } catch (Exception e) {
+                            }
+
+                            sqlPartSale += "('" + customerId + "',(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + "," + price + "," + quantity + ",'admin',now()," + discount + ",'" + invoice + "',now())";
+                            partUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + partsId + "";
+
+                            if (serviceType == "N") {
+                                sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
+                                sqlBill += "('" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
+                            } else {
+                                sqlBill = "INSERT INTO bills(`SERVICE_BILL`,`SERVICE_TIMES`,`SERVICE_TYPE`,`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`,`DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
+                                sqlBill += "('" + serviceType + "','" + serviceTimes + "','" + serviceType + "','" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
+                            }
+
+                            msg = General.update(sqlPartSale);
+                            System.out.println(msg);
+                            msg = General.update(partUpdate);
+                            System.out.println(msg);
+                            msg = General.update(sqlBill);
+                            System.out.println(msg);
+                        } catch (Exception e) {
+                            msg = e.getMessage();
+                            return json.respondWithError(msg);
+                        }
+                    }
+
+                }catch (Exception e) {
             msg = e.getMessage();
             return json.respondWithError(msg);
         }
-        return json.respondWithMessage(msg);
-    }
+                return json.respondWithMessage(msg);
+            }
 
-    @RequestMapping(value = "api/sales/partssales/{sn}", method = RequestMethod.DELETE, produces = "application/json")
-    @ResponseBody
-    public String doDelete(@PathVariable String sn) {
+            @RequestMapping(value = "api/sales/partssales/{sn}", method = RequestMethod.DELETE, produces = "application/json")
+            @ResponseBody
+            public String doDelete
+            (@PathVariable
+            String sn
+            
+                ) {
         sn = sn.replaceAll("\"", "'");
-        String sql = "DELETE FROM PartsSalesWHERE sn IN " + sn + " ";
-        msg = da.delete(sql);
-        if (msg.indexOf("Record Deleted") >= 0) {
-            return json.respondWithMessage("Record Deleted successfully", da.getAll(" from PartsSales"));
-        } else {
-            return json.respondWithError(msg);
+                String sql = "DELETE FROM PartsSalesWHERE sn IN " + sn + " ";
+                msg = da.delete(sql);
+                if (msg.indexOf("Record Deleted") >= 0) {
+                    return json.respondWithMessage("Record Deleted successfully", da.getAll(" from PartsSales"));
+                } else {
+                    return json.respondWithError(msg);
+                }
+            }
         }
-    }
-}

@@ -3,13 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/access/ApplicationUserRestController.java</file>
+            <file>file:/D:/valiant/VSMSV2/src/java/controller/access/ApplicationUserController.java</file>
             <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/consumer/StaffsRestController.java</file>
-            <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/bills/BillsRestController.java</file>
             <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/consumer/AttendanceRestController.java</file>
-            <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/sales/BikesSalesRestController.java</file>
+            <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/bills/BillsRestController.java</file>
+            <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/inventory/PartsRestController.java</file>
+            <file>file:/D:/valiant/VSMSV2/web/index.html</file>
             <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/inventory/BikePriceUpdatesRestController.java</file>
             <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/consumer/CustomersRestController.java</file>
+            <file>file:/D:/valiant/VSMSV2/src/java/rest/controller/inventory/BikesRestController.java</file>
         </group>
     </open-files>
 </project-private>
