@@ -5,6 +5,7 @@ package rest.controller.bills;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+<<<<<<< HEAD
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -13,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+=======
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 import model.DB;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -39,15 +46,23 @@ public class BillsRestController {
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
     DB db = new DB();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
     @RequestMapping(value = "api/bills/bills", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String index() {
         return json.respondWithMessage("Success", gson.toJson(da.getAll("from Bills GROUP BY INVOICE")));
     }
 
+<<<<<<< HEAD
     @RequestMapping(value = "api/bills/view", method = RequestMethod.GET, produces = "application/json")
     public String view(@RequestParam(value = "invoice", required = true) String invoice, ModelMap map, HttpServletRequest request) throws UnknownHostException {
+=======
+     @RequestMapping(value = "api/bills/view", method = RequestMethod.GET, produces="application/json")
+    public String view(@RequestParam(value = "invoice", required = true) String invoice, ModelMap map) {
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         dao.bills.DaoBills da = new dao.bills.DaoImpBills();
         List bill = da.getAll("from Bills where INVOICE ='" + invoice + "' GROUP BY INVOICE");
         String sql = "SELECT (CASE "
@@ -77,6 +92,7 @@ public class BillsRestController {
         map.addAttribute("data", billData);
         System.out.println(bill);
         map.addAttribute("billData", bill);
+<<<<<<< HEAD
         int port = request.getServerPort();
             InetAddress IP = InetAddress.getLocalHost();
             System.out.println(IP);
@@ -126,6 +142,46 @@ public class BillsRestController {
 
             model.bills.Bills obj = new model.bills.Bills();
             /*obj.setSn(map.get("sn").toString());
+=======
+        return json.respondWithMessage("Success",gson.toJson("http://192.168.100.114:8084/VSMS/Bills/View?invoice="+invoice+""));
+    }
+    
+     @RequestMapping(value = "api/notification/order", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public String order() {
+        try{
+        String order = "SELECT * FROM parts WHERE QUANTITY<=THRESHOLD";
+            System.out.println(order);
+        List orders = db.getRecord(order);
+        return json.respondWithMessage("Success", gson.toJson(orders));
+        }catch(Exception e){
+        msg = e.getMessage();
+        return json.respondWithError(msg);
+        }
+    }
+     @RequestMapping(value = "api/notification/service", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public String service() {
+        try{
+        String service = "SELECT C.`NAME` customerName, C.PHONE phone, B.MODEL bikeModel,S.`SERVICING_DATE` servicingDate,(-DATEDIFF(SYSDATE(),S.SERVICING_DATE)) AS remainingDays FROM servicing_info S,customers C, bikes B WHERE S.`CUSTOMER_ID`=C.`CUS_ID` AND C.`BIKES_ID`= B.`SN` AND (-DATEDIFF(SYSDATE(),SERVICING_DATE))<=7";
+            System.out.println(service);
+        List services = db.getRecord(service);
+        return json.respondWithMessage("Success", gson.toJson(services));
+        }catch(Exception e){
+        msg = e.getMessage();
+        return json.respondWithError(msg);
+        }
+    }
+@RequestMapping(value = "api/bills/bills", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public String doSave(@RequestBody String jcson) throws IOException {
+
+        map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
+        });
+
+        model.bills.Bills obj = new model.bills.Bills();
+        /*obj.setSn(map.get("sn").toString());
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 obj.setCusId(map.get("cusId").toString());
 obj.setCusName(map.get("cusName").toString());
 obj.setAddress(map.get("address").toString());
@@ -146,6 +202,7 @@ obj.setNetTotal(map.get("netTotal").toString());
 obj.setAdvance(map.get("advance").toString());
 obj.setDue(map.get("due").toString());
 obj.setCreatedDate(map.get("createdDate").toString());
+<<<<<<< HEAD
              */
 
             msg = da.save(obj);
@@ -167,6 +224,26 @@ obj.setCreatedDate(map.get("createdDate").toString());
 
                 model.bills.Bills obj = new model.bills.Bills();
                 /*obj.setSn(map.get("sn").toString());
+=======
+         */
+
+        msg = da.save(obj);
+        if (msg.equalsIgnoreCase("Saved")) {
+            return json.respondWithMessage("Success", da.getAll(" from Bills"));
+        }
+        return json.respondWithError(msg);
+    }
+
+    @RequestMapping(value = "api/bills/bills/{sn}", method = RequestMethod.PUT, produces = "application/json")
+    @ResponseBody
+    public String doUpdate(@RequestBody String jcson, @PathVariable String sn) throws IOException {
+        try {
+            map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
+            });
+
+            model.bills.Bills obj = new model.bills.Bills();
+            /*obj.setSn(map.get("sn").toString());
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 obj.setCusId(map.get("cusId").toString());
 obj.setCusName(map.get("cusName").toString());
 obj.setAddress(map.get("address").toString());
@@ -187,6 +264,7 @@ obj.setNetTotal(map.get("netTotal").toString());
 obj.setAdvance(map.get("advance").toString());
 obj.setDue(map.get("due").toString());
 obj.setCreatedDate(map.get("createdDate").toString());
+<<<<<<< HEAD
                  */
                 msg = da.update(obj);
                 if (msg.equalsIgnoreCase("Updated")) {
@@ -215,3 +293,29 @@ obj.setCreatedDate(map.get("createdDate").toString());
             }
         }
     }
+=======
+             */
+            msg = da.update(obj);
+            if (msg.equalsIgnoreCase("Updated")) {
+                return json.respondWithMessage("Updated successfully", da.getAll(" from Bills"));
+            }
+        } catch (Exception e) {
+            msg = e.getMessage() + " " + jcson;
+        }
+        return json.respondWithError(msg);
+    }
+
+    @RequestMapping(value = "api/bills/bills/{sn}", method = RequestMethod.DELETE, produces = "application/json")
+    @ResponseBody
+    public String doDelete(@PathVariable String sn) {
+        sn = sn.replaceAll("\"", "'");
+        String sql = "DELETE FROM BillsWHERE sn IN " + sn + " ";
+        msg = da.delete(sql);
+        if (msg.indexOf("Record Deleted") >= 0) {
+            return json.respondWithMessage("Record Deleted successfully", da.getAll(" from Bills"));
+        } else {
+            return json.respondWithError(msg);
+        }
+    }
+}
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab

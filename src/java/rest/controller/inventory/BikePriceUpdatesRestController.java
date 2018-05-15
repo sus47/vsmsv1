@@ -42,8 +42,12 @@ public class BikePriceUpdatesRestController {
     @ResponseBody
     public String doSave(@RequestBody String jcson) throws IOException {
         System.out.println(jcson);
+<<<<<<< HEAD
         String bikeId = ""; 
                 Double oldPrice = 0.0, newPrice = 0.0;
+=======
+        String bikeId = "", oldPrice = "", newPrice = "";
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         String sql = "", updateSql = "";
         try{
         String jcsonArray[] = cvt.ConvertJsonArrayToString.convert(jcson);
@@ -73,6 +77,7 @@ public class BikePriceUpdatesRestController {
                 } catch (Exception e) {
                 }
                 try {
+<<<<<<< HEAD
                     oldPrice = Convert.toDouble(row.get("oldPrice").toString());
                     System.out.println(oldPrice);
                 } catch (Exception e) {
@@ -83,6 +88,18 @@ public class BikePriceUpdatesRestController {
                     System.out.println(newPrice);
                 } catch (Exception e) {
                 }
+=======
+                    oldPrice = row.get("oldPrice").toString();
+                    System.out.println(oldPrice);
+                } catch (Exception e) {
+                }
+                try {
+                    newPrice = row.get("newPrice").toString();
+                    System.out.println(newPrice);
+                } catch (Exception e) {
+                }
+
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
             } catch (Exception Ex) {
             }
             sql += " (" + bikeId + "," + newPrice + "," + oldPrice + ", now())";

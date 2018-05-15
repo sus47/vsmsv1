@@ -134,11 +134,19 @@ String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)
                 vat = Convert.toDouble(map.get("vat").toString());
             } catch (Exception e) {
             }
+<<<<<<< HEAD
             String inv = "INSERT INTO `invoice`(`INV`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
             msg = General.update(inv);
             System.out.println(msg);
 
             String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),'Bike Purchase'," + advance + "," + dueAmount + ", now())";
+=======
+            String inv = "INSERT INTO `invoice`(`INV`,`CUS_ID`,`CREATED_DATE`) VALUES ('" + invoice + "','" + customerId + "',now())";
+            msg = General.update(inv);
+            System.out.println(msg);
+
+            String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES ('" + customerId + "','Bike Purchase'," + advance + "," + dueAmount + ", now())";
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
             msg = General.update(led);
             System.out.println(msg);
             com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
@@ -188,11 +196,19 @@ String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)
                         System.out.println(discount);
                     } catch (Exception e) {
                     }
+<<<<<<< HEAD
                     sql += " (UPPER('" + customerId + "'),'" + customerName + "','" + address + "','" + phone + "'," + pan + "," + bikeId + ",'" + invoice + "', now())";
 
                     sqlBikeSale += "(" + bikeId + ",UPPER('" + customerId + "')," + discount + ",'" + invoice + "'," + price + "," + quantity + ",'admin',now(),now())";
                     bikeUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + bikeId + "";
                     sqlBill += "('" + address + "'," + advance + "," + bikeId + ",now(),UPPER('" + customerId + "'),'" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
+=======
+                    sql += " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + "," + bikeId + ",'" + invoice + "', now())";
+
+                    sqlBikeSale += "(" + bikeId + ",'" + customerId + "'," + discount + ",'" + invoice + "'," + price + "," + quantity + ",'admin',now(),now())";
+                    bikeUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + bikeId + "";
+                    sqlBill += "('" + address + "'," + advance + "," + bikeId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
                     msg = General.update(sql);
                     System.out.println(msg);
 
@@ -203,7 +219,11 @@ String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)
                     msg = General.update(sqlBill);
                     System.out.println(msg);
 
+<<<<<<< HEAD
                     String servicing = "INSERT INTO `servicing_info`(`CUSTOMER_ID`, `SERVICING_DATE`, `REMARKS`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 20 DAY),'Bike Purchased',now())";
+=======
+                    String servicing = "INSERT INTO `servicing_info`(`CUSTOMER_ID`, `SERVICING_DATE`, `REMARKS`, `CREATED_DATE`) VALUES ('" + customerId + "',DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 20 DAY),'Bike Purchased',now())";
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
                     msg = General.update(servicing);
                 } catch (Exception e) {
                     msg = e.getMessage();

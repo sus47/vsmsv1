@@ -52,7 +52,10 @@ public class PartsRestController {
     @ResponseBody
     public String excelUpload(@RequestBody String jcson) throws IOException {
         System.out.println("inside parts api");
+<<<<<<< HEAD
         int bikeId = 0;
+=======
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         String jsonDataArray[] = JsonDataToStringArray.get(jcson);
         com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
         List list = objectMapper.readValue(jsonDataArray[1], new com.fasterxml.jackson.core.type.TypeReference<List>() {
@@ -67,12 +70,16 @@ public class PartsRestController {
                 obj.setPartsNumber(map.get("partsNumber").toString());
                 obj.setName(map.get("name").toString());
                 obj.setThreshold(Convert.toInt(map.get("threshold").toString()));
+<<<<<<< HEAD
                 try {
                     bikeId = Convert.toInt(map.get("bikeId").toString());
                     obj.setBikeId(bikeId);
                 } catch (Exception e) {
                     obj.setBikeId(0);
                 }
+=======
+                obj.setBikeId(Convert.toInt(map.get("bikeId").toString()));
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
                 obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));
                 obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
                 obj.setQuantity(Convert.toInt(map.get("quantity").toString()));
@@ -97,7 +104,11 @@ public class PartsRestController {
     @RequestMapping(value = "api/inventory/parts", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public String doSave(@RequestBody String jcson) throws IOException {
+<<<<<<< HEAD
         int bikeId = 0;
+=======
+
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
         });
 
@@ -106,12 +117,16 @@ public class PartsRestController {
         obj.setPartsNumber(map.get("partsNumber").toString());
         obj.setName(map.get("name").toString());
         obj.setThreshold(Convert.toInt(map.get("threshold").toString()));
+<<<<<<< HEAD
         try {
             bikeId = Convert.toInt(map.get("bikeId").toString());
             obj.setBikeId(bikeId);
         } catch (Exception e) {
             obj.setBikeId(0);
         }
+=======
+        obj.setBikeId(Convert.toInt(map.get("bikeId").toString()));
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));
         obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
         obj.setQuantity(Convert.toInt(map.get("quantity").toString()));

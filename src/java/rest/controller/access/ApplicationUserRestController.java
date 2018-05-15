@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+<<<<<<< HEAD
+=======
+import model.inventory.Bikes;
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.ui.Model;
@@ -38,15 +42,20 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 @RestController
 public class ApplicationUserRestController {
+<<<<<<< HEAD
     int tokenTime=60;
        
  ApiBaseController json=new ApiBaseController();
+=======
+
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 @RequestMapping(value = "api/access/applicationuserlogin", method = RequestMethod.POST, produces = "application/json")
 @ResponseBody
 public String doLogin(@RequestBody String jcson) throws IOException
 { 
  return login(jcson);
   }
+<<<<<<< HEAD
 @RequestMapping(value = "api/access/applicationuserlogin", method = RequestMethod.PUT, produces = "application/json")
 @ResponseBody
 public String doUpdate(@RequestParam String minut,@RequestParam String token) throws IOException
@@ -58,10 +67,14 @@ public String doUpdate(@RequestParam String minut,@RequestParam String token) th
     
   return temp;
 }
+=======
+
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 String login(String jcson)
 {
         Map<String, Object> map = new HashMap<String, Object>();
         ObjectMapper mapper = new ObjectMapper();  
+<<<<<<< HEAD
         String userCode="",userName="",userType="";
      
       try{
@@ -69,10 +82,20 @@ String login(String jcson)
          userCode=map.get("userCode").toString();
         String userPassword=map.get("userPassword").toString();
         String sql="SELECT PASSWORD('"+userPassword+"') AS loginPass,USER_PASSWORD AS dbPass,USER_NAME AS userName,EMAIL AS email,MOBILE AS mobile,USER_TYPE AS userType FROM application_user WHERE USER_CODE='"+userCode+"'";
+=======
+        ApiBaseController json=new ApiBaseController();
+      try{
+       map = mapper.readValue(jcson, new TypeReference<Map<String, String>>(){});
+        String userCode=map.get("userCode").toString();
+        String userPassword=map.get("userPassword").toString();
+        String sql="SELECT PASSWORD('"+userPassword+"') AS PASS,USER_PASSWORD AS dbPass,USER_NAME AS userName,GET_SCHOOL_NAME(SCHOOL_ID) schoolName,SCHOOL_ID schoolId,EMAIL AS email,MOBILE AS mobile,MUNICIPAL municipal,IF(SCHOOL_ID IS NULL,'M','S') AS userType FROM application_user WHERE USER_CODE='"+userCode+"'";
+       
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         General au=new General();
         List list=au.getRecord(sql);
         if(list.isEmpty())
         return json.respondWithError("Invalid login id");
+<<<<<<< HEAD
 
         Object object=list.get(0);
         Map row = (Map)object;       
@@ -88,12 +111,27 @@ String login(String jcson)
         if(au.save(sql)>0)
         {
         return "{\"message\":\"Success\",\"token\":\""+token+"\",\"userType\":\""+userType+"\",\"userName\":\""+userName+"\"}";
+=======
+        Object object=list.get(0);
+        Map row = (Map)object;
+        
+        if(row.get("PASS").toString().equalsIgnoreCase(row.get("dbPass").toString()))
+        {
+        Key key = MacProvider.generateKey();
+        String apiKey=key.toString();
+        String token=createJWT(apiKey, "phoenix", "{\"loginId\": \""+userCode+"\",\"userName\":\""+row.get("userName")+"\",\"userType\":\""+row.get("userType")+"\",\"municipal\":\""+row.get("municipal")+"\",\"schoolName\":\""+row.get("schoolName")+"\"}", "userLogin", (60000)*180);
+        sql="UPDATE application_user SET TOKEN='"+token+"',API_KEY='"+apiKey+"',TOKEN_EXP_TIME=(NOW()+ INTERVAL 180 MINUTE) WHERE USER_CODE='"+userCode+"'";  
+        if(au.save(sql)>0)
+        {
+        return "{\"message\":\"Success\",\"token\":\""+token+"\",\"token\":\""+token+"\"}";
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         }
         }else 
         {
         return json.respondWithError("invalid password");
         }
         return json.respondWithError("Try Again");
+<<<<<<< HEAD
         }catch(Exception e){return json.respondWithError(e.getMessage());}
 }
 
@@ -130,6 +168,12 @@ String oldToken=token;
 }catch(Exception e){return json.respondWithError(e.getMessage());}
 }
 
+=======
+}catch(Exception e){return json.respondWithError(e.getMessage());}
+}
+
+   
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 private String createJWT(String apiKey,String id, String issuer, String subject, long ttlMillis) {
  
     //The JWT signature algorithm we will be using to sign the token
@@ -173,6 +217,9 @@ return claims;
     }catch(Exception e){}
     return null;
 }
+<<<<<<< HEAD
  
 
+=======
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 }

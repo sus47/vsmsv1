@@ -192,7 +192,11 @@ public class PartsSalesRestController {
             }
 
 //            if(isService=="N"){
+<<<<<<< HEAD
             if (serviceType.equalsIgnoreCase("Y")) {
+=======
+            if (serviceType == "y") {
+>>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
                 sql = "INSERT INTO servicing_info(`CUSTOMER_ID`, `SERVICED_DATE`, `SERVICING_DATE`, `REMARKS`, SERVICING_TYPE, SERVICING_COUNT,CREATED_DATE) VALUES('" + customerId + "',now(),DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 3 MONTH),'" + remarks + "','" + serviceType + "','" + serviceTimes + "',now())";
                 msg = General.update(sql);
                 System.out.println(msg);
