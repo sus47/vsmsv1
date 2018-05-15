@@ -13,10 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-<<<<<<< HEAD
-import java.util.Locale;
-=======
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 import java.util.Map;
 import model.JsonDataToStringArray;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -73,11 +69,7 @@ public class StaffsRestController {
             try {
                 Map map = (Map) list.get(i);
                 /*obj.setSn(map.get("sn").toString());*/
-<<<<<<< HEAD
                 obj.setStaffId(map.get("staffId").toString().toUpperCase());
-=======
-                obj.setStaffId(map.get("staffId").toString());
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
                 obj.setName(map.get("name").toString());
                 obj.setAddress(map.get("address").toString());
                 obj.setPhone(map.get("phone").toString());
@@ -108,11 +100,7 @@ public class StaffsRestController {
 
         model.consumer.Staffs obj = new model.consumer.Staffs();
         /*obj.setSn(map.get("sn").toString());*/
-<<<<<<< HEAD
         obj.setStaffId(map.get("staffId").toString().toUpperCase());
-=======
-        obj.setStaffId(map.get("staffId").toString());
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         obj.setName(map.get("name").toString());
         obj.setAddress(map.get("address").toString());
         obj.setPhone(map.get("phone").toString());
@@ -136,16 +124,11 @@ public class StaffsRestController {
     @RequestMapping(value = "api/consumer/staff/{sn}", method = RequestMethod.PUT, produces = "application/json")
     @ResponseBody
     public String doUpdate(@RequestBody String jcson, @PathVariable String sn) throws IOException {
-<<<<<<< HEAD
-        System.out.println(jcson);
-=======
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         try {
             map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
             });
 
             model.consumer.Staffs obj = new model.consumer.Staffs();
-<<<<<<< HEAD
             obj.setSn(Convert.toInt(sn));
             obj.setStaffId(map.get("staffId").toString().toUpperCase());
             obj.setName(map.get("name").toString());
@@ -161,31 +144,13 @@ public class StaffsRestController {
             obj.setPost(map.get("post").toString());
             obj.setType(map.get("staffType").toString());
 
-=======
-            /*obj.setSn(map.get("sn").toString());
-obj.setStaffId(map.get("staffId").toString());
-obj.setName(map.get("name").toString());
-obj.setAddress(map.get("address").toString());
-obj.setPhone(map.get("phone").toString());
-obj.setJoinedDate(map.get("joinedDate").toString());
-obj.setSalary(map.get("salary").toString());
-obj.setAttendance(map.get("attendance").toString());
-obj.setCredit(map.get("credit").toString());
-obj.setCreatedDate(map.get("createdDate").toString());
-obj.setPost(map.get("post").toString());
-obj.setType(map.get("type").toString());
-             */
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
+
             msg = da.update(obj);
             if (msg.equalsIgnoreCase("Updated")) {
                 return json.respondWithMessage("Updated successfully", da.getAll(" from Staffs"));
             }
         } catch (Exception e) {
-<<<<<<< HEAD
             msg = e.getMessage();
-=======
-            msg = e.getMessage() + " " + jcson;
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         }
         return json.respondWithError(msg);
     }
@@ -194,11 +159,7 @@ obj.setType(map.get("type").toString());
     @ResponseBody
     public String doDelete(@PathVariable String sn) {
         sn = sn.replaceAll("\"", "'");
-<<<<<<< HEAD
         String sql = "DELETE FROM staffs WHERE SN IN " + sn + " ";
-=======
-        String sql = "DELETE FROM StaffsWHERE sn IN " + sn + " ";
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         msg = da.delete(sql);
         if (msg.indexOf("Record Deleted") >= 0) {
             return json.respondWithMessage("Record Deleted successfully", da.getAll(" from Staffs"));

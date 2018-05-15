@@ -57,7 +57,6 @@ public class BikesRestController {
         for (int i = 0; i < list.size(); i++) {
             try {
                 Map map = (Map) list.get(i);
-<<<<<<< HEAD
                 try {
                     obj.setModel(map.get("model").toString());
                 } catch (Exception e) {
@@ -98,18 +97,6 @@ public class BikesRestController {
                     obj.setCreatedDate(new Date());
                 } catch (Exception e) {
                 }
-=======
-                try{obj.setModel(map.get("model").toString());}catch(Exception e){}
-                try{obj.setColor(map.get("color").toString());}catch(Exception e){}
-                try{obj.setEngineNumber(map.get("engineNumber").toString());}catch(Exception e){}
-                try{obj.setChasisNumber(map.get("chasisNumber").toString());}catch(Exception e){}
-                try{obj.setRegNo(map.get("regNo").toString());}catch(Exception e){}
-                try{obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));}catch(Exception e){}
-                try{obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));}catch(Exception e){}
-                try{obj.setQuantity(Convert.toInt(map.get("quantity").toString()));}catch(Exception e){}
-                try{obj.setEntryDate(map.get("entryDate").toString());}catch(Exception e){}
-                try{obj.setCreatedDate(new Date());}catch(Exception e){}
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 //                try{obj.setUpdatedDate(new Date());}catch(Exception e){}
 //                try{obj.setStatus("0");}catch(Exception e){}
                 System.out.println(obj);
@@ -172,10 +159,7 @@ public class BikesRestController {
             obj.setRegNo(map.get("regNo").toString());
             obj.setCostPrice(Convert.toFloat(map.get("costPrice").toString()));
             obj.setQuantity(Convert.toInt(map.get("quantity").toString()));
-<<<<<<< HEAD
             obj.setSellingPrice(Convert.toFloat(map.get("sellingPrice").toString()));
-=======
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
             obj.setEntryDate(map.get("entryDate").toString());
             obj.setUpdatedDate(new Date());
 

@@ -21,15 +21,10 @@ password="manager";
 String tabName,fileName,packageName;
 
 
-<<<<<<< HEAD
-tabName="enquiry";
-fileName="Enquiry";
-packageName="enquiry";
-=======
+
 tabName="attendance";
 fileName="Attendance";
 packageName="consumer";
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
 
 
 new Create(tabName, fileName,packageName);

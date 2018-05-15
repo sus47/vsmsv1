@@ -132,11 +132,7 @@ public class CustomersRestController {
         return json.respondWithError(msg);
     }
 
-<<<<<<< HEAD
     @RequestMapping(value = "api/consumer/customer/{id}", method = RequestMethod.PUT, produces = "application/json")
-=======
-    @RequestMapping(value = "api/consumer/customers/{id}", method = RequestMethod.PUT, produces = "application/json")
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
     @ResponseBody
     public String doUpdate(@RequestBody String jcson, @PathVariable String id) throws IOException {
         try {
@@ -165,19 +161,12 @@ obj.setCreatedDate(map.get("createdDate").toString());
         return json.respondWithError(msg);
     }
 
-<<<<<<< HEAD
     @RequestMapping(value = "api/consumer/customer/{id}", method = RequestMethod.DELETE, produces = "application/json")
     @ResponseBody
     public String doDelete(@PathVariable String id) {
         id = id.replaceAll("\"", "'");
         String sql = "DELETE FROM customers WHERE ID IN " + id + " ";
-=======
-    @RequestMapping(value = "api/consumer/customers/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    @ResponseBody
-    public String doDelete(@PathVariable String id) {
-        id = id.replaceAll("\"", "'");
-        String sql = "DELETE FROM CustomersWHERE id IN " + id + " ";
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
+
         msg = da.delete(sql);
         if (msg.indexOf("Record Deleted") >= 0) {
             return json.respondWithMessage("Record Deleted successfully", da.getAll(" from Customers"));

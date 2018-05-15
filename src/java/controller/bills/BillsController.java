@@ -18,11 +18,8 @@ public class BillsController {
     public String doGet(ModelMap map) {
         dao.bills.DaoBills da = new dao.bills.DaoImpBills();
         map.put("Record", da.getAll("from Bills"));
-<<<<<<< HEAD
-        return "Sales/bill";
-=======
+//        return "Sales/bill";
         return "Bills/Bills";
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
     }
 
     @RequestMapping(value = "Bills/View", method = RequestMethod.GET)
