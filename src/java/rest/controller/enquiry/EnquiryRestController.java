@@ -4,7 +4,11 @@ return "\n{\"sn\": \""+sn+"\",\"name\": \""+name+"\",\"address\": \""+address+"\
 
 package rest.controller.enquiry;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import cvt.Convert;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -27,12 +31,14 @@ ObjectMapper mapper = new ObjectMapper();
 dao.enquiry.DaoEnquiry da=new dao.enquiry.DaoImpEnquiry(); 
 ApiBaseController json=new ApiBaseController();
 String msg="";
+GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson gson = gsonBuilder.create();
 
 @RequestMapping(value = "api/enquiry/enquiry", method = RequestMethod.GET, produces = "application/json")
 @ResponseBody
 public String index()
 {
-return json.respondWithMessage("Success",da.getAll("from Enquiry"));
+return json.respondWithMessage("Success",gson.toJson(da.getAll("from Enquiry")));
 }
     
 @RequestMapping(value = "api/enquiry/enquiry", method = RequestMethod.POST, produces = "application/json")
@@ -43,20 +49,19 @@ public String doSave(@RequestBody String jcson) throws IOException
  map = mapper.readValue(jcson, new TypeReference<Map<String, String>>(){});
 
 model.enquiry.Enquiry obj=new model.enquiry.Enquiry();
-/*obj.setSn(map.get("sn").toString());
+/*obj.setSn(map.get("sn").toString());*/
 obj.setName(map.get("name").toString());
 obj.setAddress(map.get("address").toString());
-obj.setPhone(map.get("phone").toString());
+obj.setPhone(Convert.toInt(map.get("phone").toString()));
 obj.setTitle(map.get("title").toString());
 obj.setDescription(map.get("description").toString());
-obj.setOfficer(map.get("officer").toString());
-obj.setDate(map.get("date").toString());
-*/
+obj.setEnquiryOfficer(map.get("enquiryOfficer").toString());
+obj.setDate(new Date());
 
  msg=da.save(obj);
 if(msg.equalsIgnoreCase("Saved"))
 {
-return json.respondWithMessage("Success",da.getAll(" from Enquiry"));
+return json.respondWithMessage("Success",gson.toJson(da.getAll(" from Enquiry")));
 }
 return json.respondWithError(msg);
 }
@@ -81,7 +86,7 @@ obj.setDate(map.get("date").toString());
  msg=da.update(obj);
 if(msg.equalsIgnoreCase("Updated"))
 {
-return json.respondWithMessage("Updated successfully",da.getAll(" from Enquiry"));
+return json.respondWithMessage("Updated successfully", gson.toJson(da.getAll(" from Enquiry")));
 }
 }catch(Exception e){msg=e.getMessage()+" "+jcson;}
 return json.respondWithError(msg);
@@ -94,7 +99,8 @@ public String doDelete(@PathVariable String sn){
 String sql="DELETE FROM enquiry WHERE SN IN "+ sn +" ";
 msg=da.delete(sql);
 if(msg.indexOf("Record Deleted")>=0)
-return json.respondWithMessage("Record Deleted successfully",da.getAll(" from Enquiry"));else 
+return json.respondWithMessage("Record Deleted successfully",gson.toJson(da.getAll(" from Enquiry")));
+else 
 return json.respondWithError(msg);
 }
 }

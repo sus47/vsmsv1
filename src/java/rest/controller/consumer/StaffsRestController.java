@@ -73,7 +73,7 @@ public class StaffsRestController {
                 obj.setName(map.get("name").toString());
                 obj.setAddress(map.get("address").toString());
                 obj.setPhone(map.get("phone").toString());
-                obj.setJoinedDate(Convert.toDate(map.get("joinedDate").toString()));
+                obj.setJoinedDate(map.get("joinedDate").toString());
                 obj.setSalary(Convert.toFloat(map.get("salary").toString()));
                 Date date = new Date();
                 obj.setCreatedDate(date);
@@ -86,7 +86,7 @@ public class StaffsRestController {
             }
         }
         if (msg.equalsIgnoreCase("Saved")) {
-            return json.respondWithMessage("Success", da.getAll(" from Staffs"));
+            return json.respondWithMessage("Success", gson.toJson(da.getAll(" from Staffs")));
         }
         return json.respondWithError(msg);
     }
@@ -105,8 +105,8 @@ public class StaffsRestController {
         obj.setAddress(map.get("address").toString());
         obj.setPhone(map.get("phone").toString());
         String jDate = map.get("joinedDate").toString();
-        Date jdate = new SimpleDateFormat("dd/MM/yyyy").parse(jDate);
-        obj.setJoinedDate(jdate);
+//        String jdate = new SimpleDateFormat("dd/MM/yyyy").format(jDate);
+        obj.setJoinedDate(jDate);
         obj.setSalary(Convert.toFloat(map.get("salary").toString()));
         Date date = new Date();
         obj.setCreatedDate(date);
@@ -116,7 +116,7 @@ public class StaffsRestController {
         msg = da.save(obj);
         System.out.println(msg);
         if (msg.equalsIgnoreCase("Saved")) {
-            return json.respondWithMessage("Success", da.getAll(" from Staffs"));
+            return json.respondWithMessage("Success", gson.toJson(da.getAll(" from Staffs")));
         }
         return json.respondWithError(msg);
     }
@@ -136,8 +136,8 @@ public class StaffsRestController {
             obj.setPhone(map.get("phone").toString());
             String jDate = map.get("joinedDate").toString();
             System.out.println(jDate);
-            Date jdate = new SimpleDateFormat("dd/MM/yyyy").parse(jDate);
-            obj.setJoinedDate(jdate);
+//            String jdate = new SimpleDateFormat("dd/MM/yyyy").format(jDate);
+            obj.setJoinedDate(jDate);
             obj.setSalary(Convert.toFloat(map.get("salary").toString()));
             Date date = new Date();
             obj.setCreatedDate(date);
@@ -147,7 +147,7 @@ public class StaffsRestController {
 
             msg = da.update(obj);
             if (msg.equalsIgnoreCase("Updated")) {
-                return json.respondWithMessage("Updated successfully", da.getAll(" from Staffs"));
+                return json.respondWithMessage("Updated successfully", gson.toJson(da.getAll(" from Staffs")));
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -162,7 +162,7 @@ public class StaffsRestController {
         String sql = "DELETE FROM staffs WHERE SN IN " + sn + " ";
         msg = da.delete(sql);
         if (msg.indexOf("Record Deleted") >= 0) {
-            return json.respondWithMessage("Record Deleted successfully", da.getAll(" from Staffs"));
+            return json.respondWithMessage("Record Deleted successfully",gson.toJson(da.getAll(" from Staffs")));
         } else {
             return json.respondWithError(msg);
         }

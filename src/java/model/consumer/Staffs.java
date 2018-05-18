@@ -5,6 +5,7 @@
  */
 package model.consumer;
 
+import cvt.Convert;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -112,8 +113,8 @@ public class Staffs implements Serializable {
         return joinedDate;
     }
 
-    public void setJoinedDate(Date joinedDate) {
-        this.joinedDate = joinedDate;
+    public void setJoinedDate(String joinedDate) {
+        this.joinedDate = Convert.toDate(joinedDate);
     }
 
     public Float getSalary() {

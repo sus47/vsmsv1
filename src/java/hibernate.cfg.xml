@@ -22,5 +22,6 @@
     <mapping class="model.consumer.Customers"/>
     <mapping class="model.consumer.Staffs"/>
     <mapping class="model.consumer.Attendance"/>
+    <mapping class="model.enquiry.Enquiry"/>
   </session-factory>
 </hibernate-configuration>

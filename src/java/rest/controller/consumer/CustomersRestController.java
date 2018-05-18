@@ -74,7 +74,7 @@ public class CustomersRestController {
                     }
                 }
                 obj.setCustomerType(cusType);
-                obj.setCustomerId(map.get("customerId").toString());
+                obj.setCustomerId(map.get("customerId").toString().toUpperCase());
                 obj.setName(map.get("name").toString());
                 obj.setAddress(map.get("address").toString());
                 obj.setPhone(map.get("phone").toString());
@@ -82,14 +82,14 @@ public class CustomersRestController {
                 obj.setCreatedDate(date);
 
                 msg = da.save(obj);
-                
+
             } catch (Exception e) {
             }
 
         }
-        System.out.println("message is"+msg);
+        System.out.println("message is" + msg);
         if (msg.equalsIgnoreCase("Saved")) {
-            return json.respondWithMessage("Success", da.getAll(" from Customers"));
+            return json.respondWithMessage("Success", gson.toJson(da.getAll(" from Customers")));
         }
         return json.respondWithError(msg);
     }
@@ -118,7 +118,7 @@ public class CustomersRestController {
             }
         }
         obj.setCustomerType(cusType);
-        obj.setCustomerId(map.get("customerId").toString());
+        obj.setCustomerId(map.get("customerId").toString().toUpperCase());
         obj.setName(map.get("name").toString());
         obj.setAddress(map.get("address").toString());
         obj.setPhone(map.get("phone").toString());
@@ -127,7 +127,7 @@ public class CustomersRestController {
 
         msg = da.save(obj);
         if (msg.equalsIgnoreCase("Saved")) {
-            return json.respondWithMessage("Success", da.getAll(" from Customers"));
+            return json.respondWithMessage("Success", gson.toJson(da.getAll(" from Customers")));
         }
         return json.respondWithError(msg);
     }
@@ -135,43 +135,60 @@ public class CustomersRestController {
     @RequestMapping(value = "api/consumer/customer/{id}", method = RequestMethod.PUT, produces = "application/json")
     @ResponseBody
     public String doUpdate(@RequestBody String jcson, @PathVariable String id) throws IOException {
+        int pan = 0;
         try {
             map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
             });
 
             model.consumer.Customers obj = new model.consumer.Customers();
-            /*obj.setId(map.get("id").toString());
-obj.setCusId(map.get("cusId").toString());
-obj.setName(map.get("name").toString());
-obj.setAddress(map.get("address").toString());
-obj.setPhone(map.get("phone").toString());
-obj.setPan(map.get("pan").toString());
-obj.setBikesId(map.get("bikesId").toString());
-obj.setPartsId(map.get("partsId").toString());
-obj.setInvoice(map.get("invoice").toString());
-obj.setCreatedDate(map.get("createdDate").toString());
-             */
-            msg = da.update(obj);
-            if (msg.equalsIgnoreCase("Updated")) {
-                return json.respondWithMessage("Updated successfully", da.getAll(" from Customers"));
+            obj.setId(Convert.toInt(id));
+            obj.setCustomerId(map.get("customerId").toString());
+            obj.setName(map.get("name").toString());
+            obj.setAddress(map.get("address").toString());
+            obj.setPhone(map.get("phone").toString());
+            String cType = map.get("customerType").toString();
+            obj.setCustomerType(cType);
+            if (cType == "P") {
+                try {
+                    obj.setPan(pan);
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            } else {
+                try {
+                    obj.setPan(Convert.toInt(map.get("panNumber").toString()));
+                } catch (Exception ex) {
+
+                }
+//obj.setCreatedDate(map.get("createdDate").toString());
+                msg = da.update(obj);
+                if (msg.equalsIgnoreCase("Updated")) {
+                    return json.respondWithMessage("Updated successfully", gson.toJson(da.getAll(" from Customers")));
+                }else{
+                    return json.respondWithError(msg);
+                }
             }
-        } catch (Exception e) {
-            msg = e.getMessage() + " " + jcson;
+        }catch (Exception e) {
+            msg = e.getMessage();
         }
-        return json.respondWithError(msg);
-    }
-
-    @RequestMapping(value = "api/consumer/customer/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    @ResponseBody
-    public String doDelete(@PathVariable String id) {
-        id = id.replaceAll("\"", "'");
-        String sql = "DELETE FROM customers WHERE ID IN " + id + " ";
-
-        msg = da.delete(sql);
-        if (msg.indexOf("Record Deleted") >= 0) {
-            return json.respondWithMessage("Record Deleted successfully", da.getAll(" from Customers"));
-        } else {
             return json.respondWithError(msg);
         }
+
+        @RequestMapping(value = "api/consumer/customer/{id}", method = RequestMethod.DELETE, produces = "application/json")
+        @ResponseBody
+        public String doDelete
+        (@PathVariable
+        String id
+        
+            ) {
+        id = id.replaceAll("\"", "'");
+            String sql = "DELETE FROM customers WHERE ID IN " + id + " ";
+
+            msg = da.delete(sql);
+            if (msg.indexOf("Record Deleted") >= 0) {
+                return json.respondWithMessage("Record Deleted successfully", gson.toJson(da.getAll(" from Customers")));
+            } else {
+                return json.respondWithError(msg);
+            }
+        }
     }
-}

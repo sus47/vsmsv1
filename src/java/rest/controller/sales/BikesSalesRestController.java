@@ -45,7 +45,10 @@ public class BikesSalesRestController {
     @RequestMapping(value = "api/sales/latestBikeInvoice", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String invoice() {
-String invoice ="SELECT IFNULL((select concat(substr(INV,1,3),substr(INV,4,10)+1) FROM invoice WHERE substr(INV,4,10)= (SELECT MAX(CAST(SUBSTR(INV,4,10) AS int)) FROM invoice)),'INV1') AS bikeInvoice FROM invoice";
+        String invoice = "SELECT CASE WHEN ((select count(*) FROM invoice)>0) THEN (select concat(substr(INV,1,3),(CAST(substr(INV,4,10) AS INT)+1)) "
+                + " FROM invoice WHERE substr(INV,4,10)= (SELECT MAX(CAST(SUBSTR(INV,4,10) AS int)) FROM invoice) )"
+                + " ELSE 'INV1' END as bikeInvoice;";
+
         List list = new DB().getRecord(invoice);
         return json.respondWithMessage("Success", gson.toJson(list));
     }
@@ -53,8 +56,10 @@ String invoice ="SELECT IFNULL((select concat(substr(INV,1,3),substr(INV,4,10)+1
     @RequestMapping(value = "api/sales/latestCustomerInvoice", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String customer() {
-        
-String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)+1) FROM invoice WHERE substr(CUS_ID,4,10)= (SELECT MAX(CAST(SUBSTR(CUS_ID,4,10) AS int)) FROM invoice)),'CUS1') AS customerId FROM invoice";
+
+        String sql ="SELECT CASE WHEN ((select count(*) FROM invoice)>0) THEN (select concat(substr(CUS_ID,1,3),(CAST(substr(CUS_ID,4,10) AS INT)+1)) "
+                + " FROM invoice WHERE substr(CUS_ID,4,10)= (SELECT MAX(CAST(SUBSTR(CUS_ID,4,10) AS int)) FROM invoice) )"
+                + " ELSE 'CUS1' END as customerId;"; 
         List list = new DB().getRecord(sql);
         return json.respondWithMessage("Success", gson.toJson(list));
     }
@@ -67,9 +72,9 @@ String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)
 //        });
         System.out.println("inside bikesales:" + jcson);
         String bikeId = "", address = "", customerId = "", customerName = "", phone = "", invoice = "";
-        double advance = 0.0, dueAmount = 0.0 , discount = 0.0, vat = 0.0;
+        double advance = 0.0, dueAmount = 0.0, discount = 0.0, vat = 0.0;
         int pan = 0;
-        String model = "", sellingPrice = "", quantity = "", price = "",  netTotal = "", orgType = "";
+        String model = "", sellingPrice = "", quantity = "", price = "", netTotal = "", orgType = "";
         String total = "";
 
         String sql = "", sqlBikeSale = "", sqlBill = "", bikeUpdate = "", sqlLedger = "";
@@ -109,7 +114,7 @@ String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)
                 invoice = (map.get("invoiceNumber").toString());
             } catch (Exception e) {
             }
-           
+
             try {
                 dueAmount = Convert.toDouble(map.get("dueAmount").toString());
             } catch (Exception e) {
@@ -215,7 +220,7 @@ String sql ="SELECT IFNULL((select concat(substr(CUS_ID,1,3),substr(CUS_ID,4,10)
             msg = e.getMessage();
             return json.respondWithError(msg);
         }
-        return json.respondWithMessage(msg);
+        return json.respondWithMessage("Successfully Sold!");
     }
 
     @RequestMapping(value = "api/sales/bikessales/{sn}", method = RequestMethod.PUT, produces = "application/json")
@@ -251,10 +256,10 @@ obj.setDiscount(map.get("discount").toString());
     public String doDelete(@PathVariable String sn
     ) {
         sn = sn.replaceAll("\"", "'");
-        String sql = "DELETE FROM BikesSalesWHERE sn IN " + sn + " ";
+        String sql = "DELETE FROM bikes_sales WHERE SN IN " + sn + " ";
         msg = da.delete(sql);
         if (msg.indexOf("Record Deleted") >= 0) {
-            return json.respondWithMessage("Record Deleted successfully", da.getAll(" from BikesSales"));
+            return json.respondWithMessage("Record Deleted successfully", gson.toJson(da.getAll(" from BikesSales")));
         } else {
             return json.respondWithError(msg);
         }

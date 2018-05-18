@@ -36,7 +36,7 @@ public class Customers implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID")
-    private Integer id;
+    private Integer sn;
     @Column(name="CUS_ID")
     private String customerId;
     @Column(name = "NAME")
@@ -63,16 +63,16 @@ public class Customers implements Serializable {
     public Customers() {
     }
 
-    public Customers(Integer id) {
-        this.id = id;
+    public Customers(Integer sn) {
+        this.sn = sn;
     }
 
     public Integer getId() {
-        return id;
+        return sn;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Integer sn) {
+        this.sn = sn;
     }
 
     public String getCustomerId() {
@@ -162,7 +162,7 @@ public class Customers implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (sn != null ? sn.hashCode() : 0);
         return hash;
     }
 
@@ -173,7 +173,7 @@ public class Customers implements Serializable {
             return false;
         }
         Customers other = (Customers) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.sn == null && other.sn != null) || (this.sn != null && !this.sn.equals(other.sn))) {
             return false;
         }
         return true;
@@ -181,7 +181,7 @@ public class Customers implements Serializable {
 
     @Override
     public String toString() {
-        return "Customers{" + "id=" + id + ", customerId=" + customerId + ", name=" + name + ", address=" + address + ", phone=" + phone + ", invoice=" + invoice + ", pan=" + pan + ", partsId=" + partsId + ", createdDate=" + createdDate + ", bikeId=" + bikeId + ", customerType=" + customerType + '}';
+        return "Customers{" + "sn=" + sn + ", customerId=" + customerId + ", name=" + name + ", address=" + address + ", phone=" + phone + ", invoice=" + invoice + ", pan=" + pan + ", partsId=" + partsId + ", createdDate=" + createdDate + ", bikeId=" + bikeId + ", customerType=" + customerType + '}';
     }
 
    

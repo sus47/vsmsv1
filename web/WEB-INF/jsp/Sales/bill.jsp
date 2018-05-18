@@ -11,15 +11,16 @@
     <head>
         <meta charset="UTF-8">
         <title>Sample Invoice</title>
-<<<<<<< HEAD
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css">
-=======
-        <link rel="stylesheet" href="css/bootstrap.css">
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         <style>
             @import url(http://fonts.googleapis.com/css?family=Bree+Serif);
             body, h1, h2, h3, h4, h5, h6{
                 font-family: 'Bree Serif', serif;
+            }
+            textarea#amountWord
+            {  
+                width: 100%;
+                border-color: Transparent;     
             }
         </style>
         <style type="text/css" media="print">
@@ -31,17 +32,11 @@
 
     <body>
         <div class="container">
-<<<<<<< HEAD
-            <%--<c:forEach items="${billData}" var="bill">--%>
-=======
             <c:forEach items="${billData}" var="bill">
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
                 <div class="row">
                     <div class="col-xs-12">
 
                         <div class="company col-xs-1">
-<<<<<<< HEAD
-                            <img src="<c:url value="../resources/logo.png"/>" alt="company logo"/>
                             <img src="${pageContext.request.contextPath}/resources/logo.png" alt="company logo"/>
                         </div>
                         <div class="company text-left col-xs-8">
@@ -52,16 +47,6 @@
                                 Ph: 047520714 / &nbsp; Cell: 9844042635, 9814829354<br/>
                                 Email: bishnuauto9@gmail.com
 
-=======
-                            <img src="logo.png">
-                        </div>
-                        <div class="company text-left col-xs-8">
-                            <p style="font-size:17px;">
-                                TBS Showroom and Bikes Pvt Ltd
-                                <br/>
-                                Ratamata-06, Sindhuli, Nepal.<br/>
-                                Phone: 047-9282662, Fax:9827929
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
                             </p>
                         </div>
                         <div class="col-xs-3 text-center">
@@ -137,16 +122,14 @@
                                 <td class="text-right">${data.discount}</td>
                                 <td class="text-right">${data.totalSp}</td>
                             </tr>
-                        </c:forEach>>
+                        </c:forEach>
                     </tbody>
                 </table>
 
                 <div class="row text-right" >
                     <div class="col-xs-8 text-left " style="left: 15px;border: 1px solid black; height: 100px;">
-                        <p>    <strong>Amount in words: </strong>
-                        </p>
-                        <p id="amountWord"></p>
-
+                        <strong>Amount in words: </strong><br/>
+                        <textarea id="amountWord" style="width:100%;"></textarea>
                     </div>
                     <div class="col-xs-2 ">
                         <p>
@@ -176,11 +159,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="totalPayable" value="${bill.netTotal}">
-<<<<<<< HEAD
-            <%--</c:forEach>--%>
-=======
             </c:forEach>
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
         </div>
 
     </body>
@@ -190,11 +169,7 @@
         console.log(money);
         var words = inWords(money);
 //        document.getElementById("amountWord").value= inWords(money);
-<<<<<<< HEAD
-        $("#amountWord").val(inWords(money));
-=======
-$("#amountWord").val(inWords(money));
->>>>>>> 057025784c6430b4d3928f13451864c41bbe3cab
+        document.getElementById("amountWord").value = (words) + "only.";
         console.log(words);
 
 

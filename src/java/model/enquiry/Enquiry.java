@@ -48,7 +48,7 @@ public class Enquiry implements Serializable {
     @Column(name = "DESCRIPTION")
     private String description;
     @Column(name = "OFFICER")
-    private String officer;
+    private String enquiryOfficer;
     @Column(name = "DATE")
     @Temporal(TemporalType.DATE)
     private Date date;
@@ -108,12 +108,12 @@ public class Enquiry implements Serializable {
         this.description = description;
     }
 
-    public String getOfficer() {
-        return officer;
+    public String getEnquiryOfficer() {
+        return enquiryOfficer;
     }
 
-    public void setOfficer(String officer) {
-        this.officer = officer;
+    public void setEnquiryOfficer(String enquiryOfficer) {
+        this.enquiryOfficer = enquiryOfficer;
     }
 
     public Date getDate() {
@@ -146,7 +146,7 @@ public class Enquiry implements Serializable {
 
     @Override
     public String toString() {
-        return "Enquiry{" + "sn=" + sn + ", name=" + name + ", address=" + address + ", phone=" + phone + ", title=" + title + ", description=" + description + ", officer=" + officer + ", date=" + date + '}';
+        return "Enquiry{" + "sn=" + sn + ", name=" + name + ", address=" + address + ", phone=" + phone + ", title=" + title + ", description=" + description + ", enquiryOfficer=" + enquiryOfficer + ", date=" + date + '}';
     }
 
   

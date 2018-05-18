@@ -137,7 +137,7 @@ obj.setAttendanceTime(map.get("attendanceTime").toString());
              */
             msg = da.update(obj);
             if (msg.equalsIgnoreCase("Updated")) {
-                return json.respondWithMessage("Updated successfully", da.getAll(" from Attendance"));
+                return json.respondWithMessage("Updated successfully", gson.toJson(da.getAll(" from Attendance")));
             }
         } catch (Exception e) {
             msg = e.getMessage() + " " + jcson;
@@ -152,7 +152,7 @@ obj.setAttendanceTime(map.get("attendanceTime").toString());
         String sql = "DELETE FROM AttendanceWHERE sn IN " + sn + " ";
         msg = da.delete(sql);
         if (msg.indexOf("Record Deleted") >= 0) {
-            return json.respondWithMessage("Record Deleted successfully", da.getAll(" from Attendance"));
+            return json.respondWithMessage("Record Deleted successfully", gson.toJson(da.getAll(" from Attendance")));
         } else {
             return json.respondWithError(msg);
         }
