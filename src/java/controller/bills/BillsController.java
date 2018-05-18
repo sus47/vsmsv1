@@ -53,7 +53,7 @@ public class BillsController {
         map.addAttribute("data", billData);
         System.out.println(bill);
         map.addAttribute("billData", bill);
-        return ("Sales/bill");
+        return "Sales/bill";
     }
     
 

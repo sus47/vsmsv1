@@ -1,17 +1,13 @@
 
 <%@page import="java.util.Date"%>
 <%@include file="../login/header.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Sample Invoice</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/css/bootstrap.css">
         <style>
             @import url(http://fonts.googleapis.com/css?family=Bree+Serif);
             body, h1, h2, h3, h4, h5, h6{
@@ -27,6 +23,10 @@
             body{
                 font-size:xx-small;
             }    
+            img{
+                margin-top: 10px;
+                width: 250px;
+            }
         </style>
     </head>
 
@@ -36,18 +36,17 @@
                 <div class="row">
                     <div class="col-xs-12">
 
-                        <div class="company col-xs-1">
-                            <img src="${pageContext.request.contextPath}/resources/logo.png" alt="company logo"/>
+                        <div class="company col-xs-2">
+                            <img src="../resources/logo.jpg" alt="company logo" style="width:170px;"/>
                         </div>
-                        <div class="company text-left col-xs-8">
-                            <p style="font-size:17px;">
+                        <div class="company text-left col-xs-7">
+                            <p style="font-size:17px; padding: 0; margin: 0;">
                                 Bishnu Auto
-                                <br/>
-                                Kamalamai-6, Sindhuli<br/>
+                            </p>
+                            <div class="a"> Kamalamai-6, Sindhuli<br/>
                                 Ph: 047520714 / &nbsp; Cell: 9844042635, 9814829354<br/>
                                 Email: bishnuauto9@gmail.com
-
-                            </p>
+                            </div>
                         </div>
                         <div class="col-xs-3 text-center">
                             <p>

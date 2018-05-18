@@ -8,8 +8,8 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 
-<project name="VSMSV1" default="default" basedir=".">
-    <description>Builds, tests, and runs the project VSMSV1.</description>
+<project name="VSMS" default="default" basedir=".">
+    <description>Builds, tests, and runs the project VSMS.</description>
 
     <import file="nbproject/build-impl.xml"/>
     <!--

@@ -78,7 +78,7 @@ public class BillsRestController {
         map.addAttribute("billData", bill);
         int port = request.getServerPort();
         InetAddress IP = InetAddress.getLocalHost();
-        System.out.println(IP);
+        System.out.println("ip is: "+IP);
         return json.respondWithMessage("Success", gson.toJson("http://" + IP.getHostAddress() + ":" + port + "/VSMS/Bills/View?invoice=" + invoice + ""));
     }
 
