@@ -158,6 +158,7 @@ public class BikesSalesRestController {
                 sqlBikeSale = "INSERT INTO bikes_sales(`BIKE_ID`, `CUSTOMER_ID`, `DISCOUNT`, `INVOICE`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `CREATED_DATE`) VALUES";
                 bikeUpdate = "UPDATE bikes SET ";
                 sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`, `BIKE_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
+                String rep = "INSERT INTO daily_sales_report (ITEM_NAME, SELLING_PRICE,PURCHASE_PRICE,PROFIT,CREATED_DATE) VALUES ";
                 Object object = list.get(i);
                 System.out.println(object);
                 try {
@@ -207,7 +208,10 @@ public class BikesSalesRestController {
                     System.out.println(msg);
                     msg = General.update(sqlBill);
                     System.out.println(msg);
-
+                    sqlBikeSale += "(" + bikeId + ",UPPER('" + customerId + "')," + discount + ",'" + invoice + "'," + price + "," + quantity + ",'admin',now(),now())";
+                    rep +="(GET_BIKE_NAME("+bikeId+"),"+price+",(SELECT COST_PRICE FROM bikes WHERE SN="+bikeId+"),("+price+"-(SELECT COST_PRICE FROM bikes WHERE SN="+bikeId+")),now())";
+                    msg = General.update(rep);
+                    System.out.println(msg);
                     String servicing = "INSERT INTO `servicing_info`(`CUSTOMER_ID`, `SERVICING_DATE`, `REMARKS`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 20 DAY),'Bike Purchased',now())";
                     msg = General.update(servicing);
                 } catch (Exception e) {

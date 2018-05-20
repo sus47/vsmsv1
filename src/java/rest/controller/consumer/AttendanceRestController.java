@@ -111,7 +111,7 @@ public class AttendanceRestController {
     @ResponseBody
     public String preview(@RequestBody String jcson,@RequestParam(value = "date", required = true) String attendanceDate) throws IOException {
        try{
-        String sql="SELECT STAFF_ID staffId, NAME name, PHONE phone, ATTENDANCE presentDays, (-DATEDIFF('"+attendanceDate+"',LAST_DAY('"+attendanceDate+"'))-ATTENDANCE) as absentDays FROM staffs";
+        String sql="SELECT STAFF_ID staffId, NAME name, PHONE phone, ATTENDANCE presentDays, (-DATEDIFF('"+attendanceDate+"',LAST_DAY('"+attendanceDate+"'))-ATTENDANCE) absentDays FROM staffs";
         List list = db.getRecord(sql);
         return json.respondWithMessage("Success", gson.toJson(list));
        }catch(Exception ex){
