@@ -76,6 +76,8 @@ String login(String jcson)
 
         Object object=list.get(0);
         Map row = (Map)object;       
+          System.out.println("password:"+row.get("dbPass").toString());
+          System.out.println("loginPass:"+row.get("loginPass").toString());
         if(row.get("loginPass").toString().equalsIgnoreCase(row.get("dbPass").toString()))
         {
         try{userCode=row.get("userCode").toString();}catch(Exception e){}

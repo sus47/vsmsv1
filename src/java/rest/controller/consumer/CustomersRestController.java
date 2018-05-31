@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import model.DB;
 import model.JsonDataToStringArray;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -39,8 +41,23 @@ public class CustomersRestController {
 
     @RequestMapping(value = "api/consumer/customer", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public String index() {
-        return json.respondWithMessage("Success", gson.toJson(da.getAll("from Customers")));
+    public String getData(HttpServletRequest request) {
+        String customerId = request.getParameter("customerId");
+        System.out.println("customerId:" + customerId);
+        if (customerId == null) {
+            return json.respondWithMessage("Success", gson.toJson(da.getAll("from Customers")));
+        } else if (!customerId.isEmpty()) {
+            try {
+                List customerData = new DB().getRecord("SELECT CUS_ID customerId, ADDRESS address, PHONE phone,NAME name, PAN panNumber, GET_BIKE_NAME(BIKES_ID) bikeId from customers where CUS_ID='"+customerId+"'");
+                
+                return json.respondWithMessage("Success", gson.toJson(customerData));
+//                return json.respondWithMessage("Success", gson.toJson(da.getAll("from Customers where customerId='" + customerId + "'")));
+            } catch (Exception e) {
+                return json.respondWithError(e.getMessage());
+            }
+        }
+
+        return json.respondWithMessage("Success");
     }
 
     @RequestMapping(value = "api/customer/exc", method = RequestMethod.POST, produces = "application/json")
@@ -164,31 +181,28 @@ public class CustomersRestController {
                 msg = da.update(obj);
                 if (msg.equalsIgnoreCase("Updated")) {
                     return json.respondWithMessage("Updated successfully", gson.toJson(da.getAll(" from Customers")));
-                }else{
+                } else {
                     return json.respondWithError(msg);
                 }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             msg = e.getMessage();
         }
+        return json.respondWithError(msg);
+    }
+
+    @RequestMapping(value = "api/consumer/customer/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    @ResponseBody
+    public String doDelete(@PathVariable String id
+    ) {
+        id = id.replaceAll("\"", "'");
+        String sql = "DELETE FROM customers WHERE ID IN " + id + " ";
+
+        msg = da.delete(sql);
+        if (msg.indexOf("Record Deleted") >= 0) {
+            return json.respondWithMessage("Record Deleted successfully", gson.toJson(da.getAll(" from Customers")));
+        } else {
             return json.respondWithError(msg);
         }
-
-        @RequestMapping(value = "api/consumer/customer/{id}", method = RequestMethod.DELETE, produces = "application/json")
-        @ResponseBody
-        public String doDelete
-        (@PathVariable
-        String id
-        
-            ) {
-        id = id.replaceAll("\"", "'");
-            String sql = "DELETE FROM customers WHERE ID IN " + id + " ";
-
-            msg = da.delete(sql);
-            if (msg.indexOf("Record Deleted") >= 0) {
-                return json.respondWithMessage("Record Deleted successfully", gson.toJson(da.getAll(" from Customers")));
-            } else {
-                return json.respondWithError(msg);
-            }
-        }
     }
+}

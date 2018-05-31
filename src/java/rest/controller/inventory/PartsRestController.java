@@ -41,7 +41,7 @@ public class PartsRestController {
     @RequestMapping(value = "api/inventory/parts", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String index() {
-        String sql = "SELECT SN sn, BIKE_ID bikeId, COST_PRICE costPrice, CREATED_DATE createdDate, ENTRY_DATE entryDate, NAME name, PARTS_NUMBER partsNumber, QUANTITY quantity, SELLING_PRICE sellingPrice, STATUS status,GET_BIKE_NAME(BIKE_ID) AS bikeName FROM parts";
+        String sql = "SELECT SN sn, BIKE_ID bikeId, COST_PRICE costPrice, CREATED_DATE createdDate, ENTRY_DATE entryDate,THRESHOLD threshold, NAME name, PARTS_NUMBER partsNumber, QUANTITY quantity, SELLING_PRICE sellingPrice, STATUS status,GET_BIKE_NAME(BIKE_ID) AS bikeName FROM parts";
         String msg = "";
         List list = null;
         list = da.getRecord(sql);

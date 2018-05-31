@@ -90,26 +90,22 @@ public class DecodeToken {
       
    try{
      General  q=new General();
-     String sql="SELECT USER_CODE,IFNULL(SCHOOL_ID,0) AS SCHOOL_ID,STATUS,TIME_TO_SEC(TIMEDIFF(TOKEN_EXP_TIME,NOW())) AS remainTime,MUNICIPAL municipal,IF(SCHOOL_ID IS NULL,'M','S') AS userType FROM application_user WHERE TOKEN='"+token+"'";
+     String sql="SELECT USER_CODE,STATUS,TIME_TO_SEC(TIMEDIFF(TOKEN_EXP_TIME,NOW())) AS remainTime,USER_TYPE AS userType FROM application_user WHERE TOKEN='"+token+"'";
     List list= q.getRecord(sql);
      if(list.isEmpty())
      {
-         setSchoolId(null);
           setUserCode(null);
            setStatus(null);
            setRemainingTime(0);
-           setMunicipal(0);
            setUserType(null);
              setTokenStatus(0);
      }else
      {
         Object object=list.get(0);
         Map row = (Map)object;
-        setSchoolId(row.get("SCHOOL_ID").toString());
         setUserCode(row.get("USER_CODE").toString());
         setStatus(row.get("STATUS").toString());
         setRemainingTime(Integer.parseInt(row.get("remainTime").toString()));
-        setMunicipal(Integer.parseInt(row.get("municipal").toString()));
         setUserType(row.get("userType").toString());
          setTokenStatus(1);
      }

@@ -45,9 +45,9 @@ public class BikesSalesRestController {
     @RequestMapping(value = "api/sales/latestBikeInvoice", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String invoice() {
-        String invoice = "SELECT CASE WHEN ((select count(*) FROM invoice)>0) THEN (select concat(substr(INV,1,3),(CAST(substr(INV,4,10) AS INT)+1)) "
-                + " FROM invoice WHERE substr(INV,4,10)= (SELECT MAX(CAST(SUBSTR(INV,4,10) AS int)) FROM invoice) )"
-                + " ELSE 'INV1' END as bikeInvoice;";
+        String invoice = "SELECT CASE WHEN ((select count(INV) FROM invoice)>0) THEN (select concat(substr(INV,1,4),(CAST(substr(INV,5,10) AS INT)+1)) "
+                + " FROM invoice WHERE substr(INV,5,10)= (SELECT MAX(CAST(SUBSTR(INV,5,10) AS int)) FROM invoice) )"
+                + " ELSE 'INVB1' END as bikeInvoice;";
 
         List list = new DB().getRecord(invoice);
         return json.respondWithMessage("Success", gson.toJson(list));
@@ -58,7 +58,7 @@ public class BikesSalesRestController {
     public String customer() {
 
         String sql ="SELECT CASE WHEN ((select count(*) FROM invoice)>0) THEN (select concat(substr(CUS_ID,1,3),(CAST(substr(CUS_ID,4,10) AS INT)+1)) "
-                + " FROM invoice WHERE substr(CUS_ID,4,10)= (SELECT MAX(CAST(SUBSTR(CUS_ID,4,10) AS int)) FROM invoice) )"
+                + " FROM invoice WHERE substr(CUS_ID,4,10)= (SELECT MAX(CAST(SUBSTR(CUS_ID,4,10) AS int)) FROM invoice GROUP BY CUS_ID) )"
                 + " ELSE 'CUS1' END as customerId;"; 
         List list = new DB().getRecord(sql);
         return json.respondWithMessage("Success", gson.toJson(list));
@@ -68,8 +68,6 @@ public class BikesSalesRestController {
     @ResponseBody
     public String doSave(@RequestBody String jcson) throws IOException {
 
-//        map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
-//        });
         System.out.println("inside bikesales:" + jcson);
         String bikeId = "", address = "", customerId = "", customerName = "", phone = "", invoice = "";
         double advance = 0.0, dueAmount = 0.0, discount = 0.0, vat = 0.0;

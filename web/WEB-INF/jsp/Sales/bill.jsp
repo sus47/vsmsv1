@@ -60,8 +60,8 @@
                     </div>
 
                 </div>
-                <div class="col-xs-12 text-center" style="border-bottom: 1px solid black; border-top: 1px solid black;">
-                    <h4>INVOICE</h4>
+                <div class="col-xs-12 text-center" style="border-bottom: 1px solid black; border-top: 1px solid black;" >
+                    <h4 <c:if test="${bill.panNo eq '0'}">class="hidden"</c:if>>INVOICE</h4>
                 </div>
 
                 <div class="row">

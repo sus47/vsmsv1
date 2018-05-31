@@ -8,9 +8,11 @@ import com.google.gson.GsonBuilder;
 import cvt.Convert;
 import dao.General;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import model.DB;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rest.controller.ApiBaseController;
 
 @RestController
-public class PartsSalesRestController {
+public class ServicingRestController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     ObjectMapper mapper = new ObjectMapper();
@@ -34,38 +36,12 @@ public class PartsSalesRestController {
     ApiBaseController json = new ApiBaseController();
     String msg = "";
 
-    @RequestMapping(value = "api/sales/partssales", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public String index() {
-        return json.respondWithMessage("Success", da.getAll("from PartsSales"));
-    }
-
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
 
-    @RequestMapping(value = "api/sales/latestPartInvoice", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "api/sales/servicesales", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String partInvoice() {
-        String invoice = "SELECT CASE WHEN ((select count(INV_P) FROM invoice)>0) THEN (select concat(substr(INV_P,1,4),(CAST(substr(INV_P,5,10) AS INT)+1)) "
-                + " FROM invoice WHERE substr(INV_P,5,10)= (SELECT MAX(CAST(SUBSTR(INV_P,5,10) AS int)) FROM invoice) )"
-                + " ELSE 'INVP1' END as partsInvoice;";
-        List list = new DB().getRecord(invoice);
-        return json.respondWithMessage("Success", gson.toJson(list));
-    }
-
-    @RequestMapping(value = "api/sales/latestServiceInvoice", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public String servInvoice() {
-        String invoice = "SELECT CASE WHEN ((select count(INV_S) FROM invoice)>0) THEN (select concat(substr(INV_S,1,4),(CAST(substr(INV_S,5,10) AS INT)+1)) "
-                + " FROM invoice WHERE substr(INV_S,5,10)= (SELECT MAX(CAST(SUBSTR(INV_S,5,10) AS int)) FROM invoice) )"
-                + " ELSE 'INVS1' END as serviceInvoice;";
-        List list = new DB().getRecord(invoice);
-        return json.respondWithMessage("Success", gson.toJson(list));
-    }
-
-    @RequestMapping(value = "api/sales/partssales", method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public String doSave(@RequestBody String jcson) throws IOException {
+    public String doSave(@RequestBody String jcson, HttpServletRequest request) throws IOException {
 
         System.out.println("data:" + jcson);
         String address = "", customerId = "", customerName = "", phone = "", invoice = "";
@@ -94,6 +70,10 @@ public class PartsSalesRestController {
             }
             try {
                 customerName = (map.get("customerName").toString());
+            } catch (Exception e) {
+            }
+            try {
+                bikeId = Convert.toInt(map.get("bikeId").toString());
             } catch (Exception e) {
             }
             try {
@@ -141,13 +121,74 @@ public class PartsSalesRestController {
                 vat = Convert.toInt(map.get("vat").toString());
             } catch (Exception e) {
             }
+//            try{isService = map.get("isService").toString();}catch(Exception e){}
+            try {
+                serviceType = map.get("serviceType").toString();
+            } catch (Exception e) {
+            }
+            try {
+                serviceTimes = map.get("serviceTimes").toString();
+            } catch (Exception e) {
+            }
 
-            String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),'Parts Sold'," + advance + "," + dueAmount + ", now())";
-            msg = General.update(led);
-            System.out.println(msg);
-            
-            inv = "INSERT INTO `invoice`(`INV_P`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
+            if (serviceType.equals("F")) {
+                switch (serviceTimes) {
+                    case "1":
+                        remarks = "First Free Servicing";
+                        break;
+                    case "2":
+                        remarks = "Second Free Servicing";
+                        break;
+                    case "3":
+                        remarks = "Third Free Servicing";
+                        break;
+                    case "4":
+                        remarks = "Fourth Free Servicing";
+                        break;
+                    case "5":
+                        remarks = "Fifth Free Servicing";
+                        break;
+                    case "6":
+                        remarks = "Sixth Free Servicing";
+                        break;
+                    case "7":
+                        remarks = "Seventh Free Servicing";
+                        break;
+                    case "8":
+                        remarks = "Eighth Free Servicing";
+                        break;
+                    case "9":
+                        remarks = "Nineth Free Servicing";
+                        break;
+                    case "10":
+                        remarks = "Tenth Free Servicing";
+                        break;
+                    case "11":
+                        remarks = "Eleventh Free Servicing";
+                        break;
+                    case "12":
+                        remarks = "Twelvth Free Servicing";
+                        break;
+                    case "13":
+                        remarks = "Thirteenth Free Servicing";
+                        break;
+                    default:
+                        remarks = "Invalid Entry";
+                        break;
+                }
+            }
+            if (serviceType.equalsIgnoreCase("f")) {
+                sql = "INSERT INTO servicing_info(`CUSTOMER_ID`,BIKE_ID, `SERVICED_DATE`, `SERVICING_DATE`, `REMARKS`, SERVICING_TYPE, SERVICING_COUNT,CREATED_DATE) "
+                        + "VALUES('" + customerId + "','" + bikeId + "',now(),DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 1 MONTH),'" + remarks + "','" + serviceType + "','" + serviceTimes + "',now())";
+                msg = General.update(sql);
+                System.out.println(msg);
+            }
+            inv = "INSERT INTO `invoice`(`INV_S`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
             msg = General.update(inv);
+            System.out.println(msg);
+
+            String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),'Parts Sold on Servicing'," + advance + "," + dueAmount + ", now())";
+            msg = General.update(led);
             System.out.println(msg);
 
             com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
@@ -157,16 +198,8 @@ public class PartsSalesRestController {
             System.out.println(list);
             System.out.println("size of list is:" + list.size());
 
-            sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`,`PARTS_ID`, `INVOICE`,`CREATED_DATE`) VALUES"
-                    + " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",'" + invoice + "', now())";
-            msg = General.update(sql);
-            System.out.println(msg);
-
             for (int i = 0; i < list.size(); i++) {
-                sqlPartSale = "INSERT INTO parts_sales(`LABOUR_CHARGE`,`CUSTOMER_ID`, `BIKE_ID`, `PARTS_ID`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `DISCOUNT`, `INVOICE`, `CREATED_DATE`) VALUES ";
-                partUpdate = "UPDATE parts SET ";
                 Object object = list.get(i);
-                String rep = "INSERT INTO daily_sales_report (LABOUR_CHARGE,ITEM_NAME, SELLING_PRICE,PURCHASE_PRICE,PROFIT,CREATED_DATE) VALUES ";
                 System.out.println(object);
                 try {
                     Map row = (Map) object;
@@ -202,17 +235,14 @@ public class PartsSalesRestController {
                         System.out.println(discount);
                     } catch (Exception e) {
                     }
-
+                    sqlPartSale = "INSERT INTO parts_sales(`LABOUR_CHARGE`,`CUSTOMER_ID`, `BIKE_ID`, `PARTS_ID`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `DISCOUNT`, `INVOICE`, `CREATED_DATE`) VALUES ";
                     sqlPartSale += "(" + labourCharge + ",'" + customerId + "',(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + "," + price + "," + quantity + ",'admin',now()," + discount + ",'" + invoice + "',now())";
+
+                    partUpdate = "UPDATE parts SET ";
                     partUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + partsId + "";
 
-                    if (serviceType == "N") {
-                        sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
-                        sqlBill += "('" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
-                    } else {
-                        sqlBill = "INSERT INTO bills(`SERVICE_BILL`,`SERVICE_TIMES`,`SERVICE_TYPE`,`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`,`DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
-                        sqlBill += "('" + serviceType + "','" + serviceTimes + "','" + serviceType + "','" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
-                    }
+                    sqlBill = "INSERT INTO bills(`SERVICE_BILL`,`SERVICE_TIMES`,`SERVICE_TYPE`,`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`,`DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
+                    sqlBill += "('" + serviceType + "','" + serviceTimes + "','" + serviceType + "','" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
 
                     msg = General.update(sqlPartSale);
                     System.out.println(msg);
@@ -221,6 +251,7 @@ public class PartsSalesRestController {
                     msg = General.update(sqlBill);
                     System.out.println(msg);
 
+                    String rep = "INSERT INTO daily_sales_report (LABOUR_CHARGE,ITEM_NAME, SELLING_PRICE,PURCHASE_PRICE,PROFIT,CREATED_DATE) VALUES ";
                     rep += "(" + labourCharge + ",GET_PARTS_NAME(" + partsId + ")," + price + ",(SELECT COST_PRICE FROM parts WHERE SN=" + partsId + "),(" + price + "-(SELECT COST_PRICE FROM parts WHERE SN=" + partsId + ")),now())";
                     msg = General.update(rep);
                     System.out.println(msg);
@@ -234,20 +265,13 @@ public class PartsSalesRestController {
             msg = e.getMessage();
             return json.respondWithError(msg);
         }
-        return json.respondWithMessage(msg);
+
+        int port = request.getServerPort();
+        InetAddress IP = InetAddress.getLocalHost();
+        System.out.println("ip is: " + IP);
+        return json.respondWithMessage("Success", gson.toJson("http://" + IP.getHostAddress() + ":" + port + "/VSMS/Bills/View?invoice=" + invoice + ""));
+
+//        return json.respondWithMessage(msg);
     }
 
-    @RequestMapping(value = "api/sales/partssales/{sn}", method = RequestMethod.DELETE, produces = "application/json")
-    @ResponseBody
-    public String doDelete(@PathVariable String sn
-    ) {
-        sn = sn.replaceAll("\"", "'");
-        String sql = "DELETE FROM PartsSalesWHERE sn IN " + sn + " ";
-        msg = da.delete(sql);
-        if (msg.indexOf("Record Deleted") >= 0) {
-            return json.respondWithMessage("Record Deleted successfully", da.getAll(" from PartsSales"));
-        } else {
-            return json.respondWithError(msg);
-        }
-    }
 }

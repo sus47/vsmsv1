@@ -18,6 +18,7 @@
     <mapping class="model.bills.Bills"/>
     <mapping class="model.sales.BikesSales"/>
     <mapping class="model.sales.PartsSales"/>
+    <mapping class="model.sales.Invoice"/>
     <mapping class="model.inventory.Ledger"/>
     <mapping class="model.consumer.Customers"/>
     <mapping class="model.consumer.Staffs"/>

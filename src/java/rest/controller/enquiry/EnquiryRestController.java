@@ -50,17 +50,22 @@ public class EnquiryRestController {
     @RequestMapping(value = "api/report/daily_report", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String getReportOne() {
+        Double labourCharge=0.0;
         String sql = "SELECT ITEM_NAME itemSold, SELLING_PRICE sellingPrice,PURCHASE_PRICE purchasePrice,PROFIT profit FROM daily_sales_report WHERE CREATED_DATE = DATE_FORMAT(now(), \"%Y-%m-%d\");";
         List list = new DB().getRecord(sql);
         System.out.println(list);
         sql = "SELECT SUM(LABOUR_CHARGE) labourCharge FROM daily_sales_report WHERE CREATED_DATE = DATE_FORMAT(now(), '%Y-%m-%d')";
         List lC = new DB().getRecord(sql);
         Map mapper = (Map) lC.get(0);
-        Double labourCharge = Convert.toDouble(mapper.get("labourCharge").toString());
+       try{
+           labourCharge = Convert.toDouble(mapper.get("labourCharge").toString());
+       }catch(Exception e){
+           
+       }
         System.out.println(list);
         return json.respondWithMessage("Success", gson.toJson(list)+",\"labourCharge\":"+labourCharge);
     }
-    @RequestMapping(value = "api/access/applicationpermissionmonthly_report", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "api/report/monthly_report", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String getTimelyReport(HttpServletRequest request) throws ParseException {
         SimpleDateFormat ind = new SimpleDateFormat("dd/MM/yyyy");

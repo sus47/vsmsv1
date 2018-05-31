@@ -45,8 +45,7 @@ public class Staffs implements Serializable {
     @Column(name = "PHONE")
     private String phone;
     @Column(name = "JOINED_DATE")
-    @Temporal(TemporalType.DATE)
-    private Date joinedDate;
+    private String joinedDate;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "SALARY")
     private Float salary;
@@ -109,12 +108,12 @@ public class Staffs implements Serializable {
         this.phone = phone;
     }
 
-    public Date getJoinedDate() {
+    public String getJoinedDate() {
         return joinedDate;
     }
 
     public void setJoinedDate(String joinedDate) {
-        this.joinedDate = Convert.toDate(joinedDate);
+        this.joinedDate = joinedDate;
     }
 
     public Float getSalary() {
