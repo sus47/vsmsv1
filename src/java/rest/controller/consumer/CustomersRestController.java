@@ -45,10 +45,10 @@ public class CustomersRestController {
         String customerId = request.getParameter("customerId");
         System.out.println("customerId:" + customerId);
         if (customerId == null) {
-            return json.respondWithMessage("Success", gson.toJson(da.getAll("from Customers")));
+            return json.respondWithMessage("Success", gson.toJson(da.getAll("from Customers group by customerId")));
         } else if (!customerId.isEmpty()) {
             try {
-                List customerData = new DB().getRecord("SELECT CUS_ID customerId, ADDRESS address, PHONE phone,NAME name, PAN panNumber, GET_BIKE_NAME(BIKES_ID) bikeId from customers where CUS_ID='"+customerId+"'");
+                List customerData = new DB().getRecord("SELECT CUS_ID customerId, ADDRESS address, PHONE phone,NAME name, PAN panNumber, BIKES_ID sn, GET_BIKE_NAME(BIKES_ID) model from customers where CUS_ID='"+customerId+"'");
                 
                 return json.respondWithMessage("Success", gson.toJson(customerData));
 //                return json.respondWithMessage("Success", gson.toJson(da.getAll("from Customers where customerId='" + customerId + "'")));

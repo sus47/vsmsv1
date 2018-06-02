@@ -183,7 +183,7 @@ public class ServicingRestController {
                 msg = General.update(sql);
                 System.out.println(msg);
             }
-            inv = "INSERT INTO `invoice`(`INV_S`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
+            inv = "INSERT INTO `invoice`(`INV_S`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),now())";
             msg = General.update(inv);
             System.out.println(msg);
 
@@ -236,13 +236,13 @@ public class ServicingRestController {
                     } catch (Exception e) {
                     }
                     sqlPartSale = "INSERT INTO parts_sales(`LABOUR_CHARGE`,`CUSTOMER_ID`, `BIKE_ID`, `PARTS_ID`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `DISCOUNT`, `INVOICE`, `CREATED_DATE`) VALUES ";
-                    sqlPartSale += "(" + labourCharge + ",'" + customerId + "',(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + "," + price + "," + quantity + ",'admin',now()," + discount + ",'" + invoice + "',now())";
+                    sqlPartSale += "(" + labourCharge + ",'" + customerId + "',"+bikeId+"," + partsId + "," + price + "," + quantity + ",'admin',now()," + discount + ",'" + invoice + "',now())";
 
                     partUpdate = "UPDATE parts SET ";
                     partUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + partsId + "";
 
                     sqlBill = "INSERT INTO bills(`SERVICE_BILL`,`SERVICE_TIMES`,`SERVICE_TYPE`,`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`,`DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
-                    sqlBill += "('" + serviceType + "','" + serviceTimes + "','" + serviceType + "','" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
+                    sqlBill += "('" + serviceType + "','" + serviceTimes + "','" + serviceType + "','" + address + "'," + advance + ","+bikeId+"," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
 
                     msg = General.update(sqlPartSale);
                     System.out.println(msg);

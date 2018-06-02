@@ -62,19 +62,46 @@
                 </div>
                 <div class="col-xs-12 text-center" style="border-bottom: 1px solid black; border-top: 1px solid black;" >
                     <h4 <c:if test="${bill.panNo eq '0'}">class="hidden"</c:if>>INVOICE</h4>
-                </div>
+                    </div>
 
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" style="padding: 0;">
-                                <p style="font-size:16px;">Customer Name: ${bill.cusName}</h4>
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="padding: 0;">
+                                    <p style="font-size:16px;">Customer Name: ${bill.cusName}</h4>
                             </div>
                             <div class="panel-body" style="padding:0;">
                                 <p>
                                     ${bill.address} <br>
                                     Phone: ${bill.phone} <br>
                                     <span class="pan">PAN No/VAT No: ${bill.panNo} </span><br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--${bill}-->
+                    <div class="col-xs-5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="padding: 0;">
+                                <c:if test="${bill.serviceBill ne null}">
+                                    <p style="font-size:16px;">Service Type: 
+                                        <c:choose>
+                                            <c:when test="${bill.serviceBill eq 'F'}">
+                                                <input type="checkbox" checked="checked">Free 
+                                                &emsp; <input type="checkbox" disabled="disabled"/>Paid</h4>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="checkbox" disabled="disabled">Free 
+                                                &emsp; <input type="checkbox" checked="checked"/>Paid</h4>
+                                            </c:otherwise></c:choose>
+                                    </div> 
+                            </c:if>
+
+                            <div class="panel-body" style="padding:0;">
+                                <p>
+                                    Bike Model: ${bill.bikeModel} <br>
+                                    Bike Number: ${bill.engineNumber} <br>
+                                    <span class="pan">Frame Number/Chasis Number: ${bill.chasisNumber} </span><br>
                                 </p>
                             </div>
                         </div>
@@ -167,7 +194,7 @@
         var money = document.getElementById("totalPayable").value;
         console.log(money);
         var words = inWords(money);
-//        document.getElementById("amountWord").value= inWords(money);
+    //        document.getElementById("amountWord").value= inWords(money);
         document.getElementById("amountWord").value = (words) + "only.";
         console.log(words);
 

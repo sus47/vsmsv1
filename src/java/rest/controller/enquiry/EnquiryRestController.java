@@ -50,21 +50,22 @@ public class EnquiryRestController {
     @RequestMapping(value = "api/report/daily_report", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String getReportOne() {
-        Double labourCharge=0.0;
+        Double labourCharge = 0.0;
         String sql = "SELECT ITEM_NAME itemSold, SELLING_PRICE sellingPrice,PURCHASE_PRICE purchasePrice,PROFIT profit FROM daily_sales_report WHERE CREATED_DATE = DATE_FORMAT(now(), \"%Y-%m-%d\");";
         List list = new DB().getRecord(sql);
         System.out.println(list);
         sql = "SELECT SUM(LABOUR_CHARGE) labourCharge FROM daily_sales_report WHERE CREATED_DATE = DATE_FORMAT(now(), '%Y-%m-%d')";
         List lC = new DB().getRecord(sql);
         Map mapper = (Map) lC.get(0);
-       try{
-           labourCharge = Convert.toDouble(mapper.get("labourCharge").toString());
-       }catch(Exception e){
-           
-       }
+        try {
+            labourCharge = Convert.toDouble(mapper.get("labourCharge").toString());
+        } catch (Exception e) {
+
+        }
         System.out.println(list);
-        return json.respondWithMessage("Success", gson.toJson(list)+",\"labourCharge\":"+labourCharge);
+        return json.respondWithMessage("Success", gson.toJson(list) + ",\"labourCharge\":" + labourCharge);
     }
+
     @RequestMapping(value = "api/report/monthly_report", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String getTimelyReport(HttpServletRequest request) throws ParseException {
@@ -74,16 +75,16 @@ public class EnquiryRestController {
         String outFromDate = oud.format(fromDate);
         Date toDate = ind.parse(request.getParameter("toDate"));
         String outToDate = oud.format(toDate);
-        String sql = "SELECT ITEM_NAME itemSold, SELLING_PRICE sellingPrice,PURCHASE_PRICE purchasePrice,PROFIT profit FROM daily_sales_report WHERE CREATED_DATE BETWEEN '"+outFromDate+"' AND '"+outToDate+"'";
+        String sql = "SELECT ITEM_NAME itemSold, SELLING_PRICE sellingPrice,PURCHASE_PRICE purchasePrice,PROFIT profit FROM daily_sales_report WHERE CREATED_DATE BETWEEN '" + outFromDate + "' AND '" + outToDate + "'";
         System.out.println(sql);
         List list = new DB().getRecord(sql);
         System.out.println(list);
-        sql = "SELECT SUM(LABOUR_CHARGE) labourCharge FROM daily_sales_report WHERE CREATED_DATE BETWEEN '"+outFromDate+"' AND '"+outToDate+"'";
+        sql = "SELECT SUM(LABOUR_CHARGE) labourCharge FROM daily_sales_report WHERE CREATED_DATE BETWEEN '" + outFromDate + "' AND '" + outToDate + "'";
         List lC = new DB().getRecord(sql);
         Map mapper = (Map) lC.get(0);
         Double labourCharge = Convert.toDouble(mapper.get("labourCharge").toString());
         System.out.println(list);
-        return json.respondWithMessage("Success", gson.toJson(list)+",\"labourCharge\":"+labourCharge);
+        return json.respondWithMessage("Success", gson.toJson(list) + ",\"labourCharge\":" + labourCharge);
     }
 
     @RequestMapping(value = "api/enquiry/enquiry", method = RequestMethod.POST, produces = "application/json")
@@ -116,17 +117,16 @@ public class EnquiryRestController {
         try {
             map = mapper.readValue(jcson, new TypeReference<Map<String, String>>() {
             });
-
             model.enquiry.Enquiry obj = new model.enquiry.Enquiry();
-            /*obj.setSn(map.get("sn").toString());
-obj.setName(map.get("name").toString());
-obj.setAddress(map.get("address").toString());
-obj.setPhone(map.get("phone").toString());
-obj.setTitle(map.get("title").toString());
-obj.setDescription(map.get("description").toString());
-obj.setOfficer(map.get("officer").toString());
-obj.setDate(map.get("date").toString());
-             */
+            obj.setSn(Convert.toInt(sn));
+            obj.setName(map.get("name").toString());
+            obj.setAddress(map.get("address").toString());
+            obj.setPhone(Convert.toInt(map.get("phone").toString()));
+            obj.setTitle(map.get("title").toString());
+            obj.setDescription(map.get("description").toString());
+            obj.setEnquiryOfficer(map.get("enquiryOfficer").toString());
+            obj.setDate(new Date());
+
             msg = da.update(obj);
             if (msg.equalsIgnoreCase("Updated")) {
                 return json.respondWithMessage("Updated successfully", gson.toJson(da.getAll(" from Enquiry")));

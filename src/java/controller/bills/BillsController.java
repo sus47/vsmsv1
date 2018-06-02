@@ -25,7 +25,11 @@ public class BillsController {
     @RequestMapping(value = "Bills/View", method = RequestMethod.GET)
     public String view(@RequestParam(value = "invoice", required = true) String invoice, ModelMap map) {
         dao.bills.DaoBills da = new dao.bills.DaoImpBills();
-        List bill = da.getAll("from Bills where INVOICE ='" + invoice + "' GROUP BY INVOICE");
+        String billSql = "SELECT `SN` sn, `ADDRESS` address, `ADVANCE` advance, `BIKE_ID` bikeId, `PARTS_ID` partsId, `CREATED_DATE` createdDate, `CUS_ID` cusId, `CUS_NAME` cusName, `CUS_TYPE` cusType, `DISCOUNT` discount, `DUE` due, "
+                + "`INVOICE` invoice, `NET_TOTAL` netTotal , `ORG_TYPE` orgType , `PAN_NO` panNo, `PHONE` phone, `QUANTITY` quantity, `SERVICE_BILL` serviceBill, `SERVICE_TIMES` serviceTimes, `SERVICE_TYPE` serviceType, "
+                + "`TOTAL_SP` totalSp, `VAT` vat, `TOTAL` total,GET_BIKE_CHASIS_NUMBER(BIKE_ID) chasisNumber, GET_BIKE_ENGINE_NUMBER(BIKE_ID) engineNumber, GET_BIKE_NAME(BIKE_ID) bikeModel FROM `bills` where INVOICE ='" + invoice + "' GROUP BY INVOICE";
+        
+        List bill = new DB().getRecord(billSql);
         String sql = "SELECT (CASE "
                 + " WHEN (SUBSTR(INVOICE,1,4)='INVB') THEN (SELect ENGINE_NUMBER from bikes where SN=BI.BIKE_ID) "
                 + " WHEN (SUBSTR(INVOICE,1,4)='INVP') THEN (SELect PARTS_NUMBER from parts where SN=BI.PARTS_ID) "

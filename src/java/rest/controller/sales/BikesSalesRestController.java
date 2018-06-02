@@ -57,9 +57,9 @@ public class BikesSalesRestController {
     @ResponseBody
     public String customer() {
 
-        String sql ="SELECT CASE WHEN ((select count(*) FROM invoice)>0) THEN (select concat(substr(CUS_ID,1,3),(CAST(substr(CUS_ID,4,10) AS INT)+1)) "
-                + " FROM invoice WHERE substr(CUS_ID,4,10)= (SELECT MAX(CAST(SUBSTR(CUS_ID,4,10) AS int)) FROM invoice GROUP BY CUS_ID) )"
-                + " ELSE 'CUS1' END as customerId;"; 
+        String sql = "SELECT CASE WHEN ((select count(CUS_ID) FROM invoice)>0) THEN (select concat(substr(CUS_ID,1,3),(CAST(substr(CUS_ID,4,10) AS INT)+1)) "
+                + " FROM invoice WHERE substr(CUS_ID,4,10)= (SELECT MAX(CAST(SUBSTR(CUS_ID,4,10) AS int)) FROM invoice) )"
+                + " ELSE 'CUS1' END as customerId;";
         List list = new DB().getRecord(sql);
         return json.respondWithMessage("Success", gson.toJson(list));
     }
@@ -69,7 +69,7 @@ public class BikesSalesRestController {
     public String doSave(@RequestBody String jcson) throws IOException {
 
         System.out.println("inside bikesales:" + jcson);
-        String bikeId = "", address = "", customerId = "", customerName = "", phone = "", invoice = "";
+        String bikeId = "", inv = "", address = "", customerId = "", customerName = "", customerType = "", phone = "", invoice = "";
         double advance = 0.0, dueAmount = 0.0, discount = 0.0, vat = 0.0;
         int pan = 0;
         String model = "", sellingPrice = "", quantity = "", price = "", netTotal = "", orgType = "";
@@ -92,6 +92,10 @@ public class BikesSalesRestController {
             }
             try {
                 customerName = (map.get("customerName").toString());
+            } catch (Exception e) {
+            }
+            try {
+                customerType = (map.get("customerType").toString());
             } catch (Exception e) {
             }
             try {
@@ -137,10 +141,14 @@ public class BikesSalesRestController {
                 vat = Convert.toDouble(map.get("vat").toString());
             } catch (Exception e) {
             }
-            String inv = "INSERT INTO `invoice`(`INV`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
+
+            if (customerType.equalsIgnoreCase("n")) {
+                inv = "INSERT INTO `invoice`(`INV`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
+            } else {
+                inv = "INSERT INTO `invoice`(`INV`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),now())";
+            }
             msg = General.update(inv);
             System.out.println(msg);
-
             String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),'Bike Purchase'," + advance + "," + dueAmount + ", now())";
             msg = General.update(led);
             System.out.println(msg);
@@ -152,7 +160,6 @@ public class BikesSalesRestController {
             System.out.println("size of list is:" + list.size());
 
             for (int i = 0; i < list.size(); i++) {
-                sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`, `INVOICE`,`CREATED_DATE`) VALUES";
                 sqlBikeSale = "INSERT INTO bikes_sales(`BIKE_ID`, `CUSTOMER_ID`, `DISCOUNT`, `INVOICE`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `CREATED_DATE`) VALUES";
                 bikeUpdate = "UPDATE bikes SET ";
                 sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`, `BIKE_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
@@ -192,6 +199,8 @@ public class BikesSalesRestController {
                         System.out.println(discount);
                     } catch (Exception e) {
                     }
+
+                    sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`, `INVOICE`,`CREATED_DATE`) VALUES";
                     sql += " (UPPER('" + customerId + "'),'" + customerName + "','" + address + "','" + phone + "'," + pan + "," + bikeId + ",'" + invoice + "', now())";
 
                     sqlBikeSale += "(" + bikeId + ",UPPER('" + customerId + "')," + discount + ",'" + invoice + "'," + price + "," + quantity + ",'admin',now(),now())";
@@ -207,7 +216,7 @@ public class BikesSalesRestController {
                     msg = General.update(sqlBill);
                     System.out.println(msg);
                     sqlBikeSale += "(" + bikeId + ",UPPER('" + customerId + "')," + discount + ",'" + invoice + "'," + price + "," + quantity + ",'admin',now(),now())";
-                    rep +="(GET_BIKE_NAME("+bikeId+"),"+price+",(SELECT COST_PRICE FROM bikes WHERE SN="+bikeId+"),("+price+"-(SELECT COST_PRICE FROM bikes WHERE SN="+bikeId+")),now())";
+                    rep += "(GET_BIKE_NAME(" + bikeId + ")," + price + ",(SELECT COST_PRICE FROM bikes WHERE SN=" + bikeId + "),(" + price + "-(SELECT COST_PRICE FROM bikes WHERE SN=" + bikeId + ")),now())";
                     msg = General.update(rep);
                     System.out.println(msg);
                     String servicing = "INSERT INTO `servicing_info`(`CUSTOMER_ID`, `SERVICING_DATE`, `REMARKS`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),DATE_ADD(DATE_FORMAT(SYSDATE(),'%Y-%m-%d'), INTERVAL 20 DAY),'Bike Purchased',now())";

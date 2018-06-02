@@ -72,7 +72,8 @@ public class PartsSalesRestController {
         String model = "", sellingPrice = "", quantity = "", price = "", cusType = "", netTotal = "", orgType = "";
         String total = "", serviceType = "", serviceTimes = "", isService = "";
         int bikeId = 0, partsId = 0, pan = 0;
-        float advance = 0, discount = 0, dueAmount = 0, vat = 0;
+        float advance = 0, discount = 0, dueAmount = 0;
+        Double vat = 0.0;
         Double labourCharge = 0.0;
         String sql = "", sqlPartSale = "", sqlBill = "", partUpdate = "", sqlLedger = "", inv = "", remarks = "";
         try {
@@ -114,7 +115,7 @@ public class PartsSalesRestController {
             } catch (Exception e) {
             }
             try {
-                cusType = (map.get("cusType").toString());
+                cusType = (map.get("customerType").toString());
             } catch (Exception e) {
             }
             try {
@@ -123,6 +124,10 @@ public class PartsSalesRestController {
             }
             try {
                 netTotal = map.get("netTotal").toString();
+            } catch (Exception e) {
+            }
+            try {
+                bikeId = Convert.toInt(map.get("bikeId").toString());
             } catch (Exception e) {
             }
             try {
@@ -138,15 +143,20 @@ public class PartsSalesRestController {
             } catch (Exception e) {
             }
             try {
-                vat = Convert.toInt(map.get("vat").toString());
+                vat = Convert.toDouble(map.get("vat").toString());
             } catch (Exception e) {
             }
 
             String led = "INSERT INTO `ledger`(`CUS_ID`, `DESCRIPTION`, `DEBIT`, `CREDIT`, `CREATED_DATE`) VALUES (UPPER('" + customerId + "'),'Parts Sold'," + advance + "," + dueAmount + ", now())";
             msg = General.update(led);
             System.out.println(msg);
-            
-            inv = "INSERT INTO `invoice`(`INV_P`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
+
+            if (cusType.equalsIgnoreCase("n")) {
+                inv = "INSERT INTO `invoice`(`INV_P`,`CUS_ID`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),UPPER('" + customerId + "'),now())";
+            } else {
+                inv = "INSERT INTO `invoice`(`INV_P`,`CREATED_DATE`) VALUES (UPPER('" + invoice + "'),now())";
+
+            }
             msg = General.update(inv);
             System.out.println(msg);
 
@@ -156,12 +166,12 @@ public class PartsSalesRestController {
 
             System.out.println(list);
             System.out.println("size of list is:" + list.size());
-
-            sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`,`PARTS_ID`, `INVOICE`,`CREATED_DATE`) VALUES"
-                    + " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",'" + invoice + "', now())";
-            msg = General.update(sql);
-            System.out.println(msg);
-
+            if (cusType.equalsIgnoreCase("n")) {
+                sql = "INSERT INTO customers(`CUS_ID`, `NAME`, `ADDRESS`, `PHONE`, `PAN`, `BIKES_ID`,`PARTS_ID`, `INVOICE`,`CREATED_DATE`) VALUES"
+                        + " ('" + customerId + "','" + customerName + "','" + address + "','" + phone + "'," + pan + ","+bikeId+"," + partsId + ",'" + invoice + "', now())";
+                msg = General.update(sql);
+                System.out.println(msg);
+            }
             for (int i = 0; i < list.size(); i++) {
                 sqlPartSale = "INSERT INTO parts_sales(`LABOUR_CHARGE`,`CUSTOMER_ID`, `BIKE_ID`, `PARTS_ID`, `PRICE`, `QUANTITY`, `SOLD_BY`, `SOLD_DATE`, `DISCOUNT`, `INVOICE`, `CREATED_DATE`) VALUES ";
                 partUpdate = "UPDATE parts SET ";
@@ -203,16 +213,11 @@ public class PartsSalesRestController {
                     } catch (Exception e) {
                     }
 
-                    sqlPartSale += "(" + labourCharge + ",'" + customerId + "',(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + "," + price + "," + quantity + ",'admin',now()," + discount + ",'" + invoice + "',now())";
+                    sqlPartSale += "(" + labourCharge + ",'" + customerId + "',"+bikeId+"," + partsId + "," + price + "," + quantity + ",'admin',now()," + discount + ",'" + invoice + "',now())";
                     partUpdate += "QUANTITY=QUANTITY-" + quantity + ", UPDATED_DATE=now() WHERE SN=" + partsId + "";
 
-                    if (serviceType == "N") {
-                        sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
-                        sqlBill += "('" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
-                    } else {
-                        sqlBill = "INSERT INTO bills(`SERVICE_BILL`,`SERVICE_TIMES`,`SERVICE_TYPE`,`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`,`DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
-                        sqlBill += "('" + serviceType + "','" + serviceTimes + "','" + serviceType + "','" + address + "'," + advance + ",(SELECT BIKE_ID FROM parts WHERE SN=" + partsId + ")," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
-                    }
+                    sqlBill = "INSERT INTO bills(`ADDRESS`, `ADVANCE`,`BIKE_ID`,`PARTS_ID`, `CREATED_DATE`, `CUS_ID`, `CUS_NAME`, `DISCOUNT`, `DUE`, `INVOICE`, `NET_TOTAL`, `ORG_TYPE`, `PAN_NO`, `PHONE`, `QUANTITY`, `TOTAL_SP`, `VAT`, `TOTAL`) VALUES ";
+                    sqlBill += "('" + address + "'," + advance + ","+bikeId+"," + partsId + ",now(),'" + customerId + "','" + customerName + "'," + discount + "," + dueAmount + ",'" + invoice + "'," + netTotal + ",'" + orgType + "'," + pan + ",'" + phone + "'," + quantity + "," + sellingPrice + "," + vat + "," + total + ")";
 
                     msg = General.update(sqlPartSale);
                     System.out.println(msg);

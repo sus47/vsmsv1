@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.DB;
 import model.JsonDataToStringArray;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -42,7 +43,10 @@ public class StaffsRestController {
     @RequestMapping(value = "api/consumer/staff", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public String index() {
-        return json.respondWithMessage("Success", gson.toJson(da.getAll("from Staffs")));
+        String sql = "SELECT `SN` sn, `STAFF_ID` staffId, `NAME` name, `ADDRESS` address, `PHONE` phone, `JOINED_DATE` joinedDate, `SALARY` salary,"
+                + " `ATTENDANCE` attendance, `CREDIT` credit, `CREATED_DATE` createdDate, `POST` post, `TYPE` staffType FROM `staffs`";
+        List staffs = new DB().getRecord(sql);
+        return json.respondWithMessage("Success", gson.toJson(staffs));
     }
 
     @RequestMapping(value = "api/staff/attendance", method = RequestMethod.POST, produces = "application/json")

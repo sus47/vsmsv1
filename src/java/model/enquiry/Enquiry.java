@@ -51,7 +51,7 @@ public class Enquiry implements Serializable {
     private String enquiryOfficer;
     @Column(name = "DATE")
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date date = new Date();
 
     public Enquiry() {
     }

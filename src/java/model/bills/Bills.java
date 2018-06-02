@@ -60,6 +60,8 @@ public class Bills implements Serializable {
     private String invoice;
     @Column(name = "BIKE_ID")
     private int bikeId;
+    @Column(name = "PARTS_ID")
+    private int partsId;
     @Column(name = "QUANTITY")
     private int quantity;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
